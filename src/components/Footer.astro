@@ -1,0 +1,322 @@
+---
+import { businessConfig } from '@/config/business';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-container">
+    <!-- 1. Sütun: Marka Kimliği -->
+    <div class="footer-col brand-col">
+      <div class="footer-brand">
+        <span class="brand-title">GÜZELYALI DÖNERCİSİ</span>
+        <span class="brand-subtitle">ADANA • ÇUKUROVA</span>
+      </div>
+      <p class="brand-description">
+        Özenle seçilen etler, geleneksel köz ateşinin ağır ağır işleyen sabrı ve Çukurova’nın sıcak misafirperverliği. Adana Güzelyalı’da gerçek yaprak döner lezzeti çok yakında.
+      </p>
+      <div class="footer-socials">
+        <a 
+          href={businessConfig.social.instagram} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="social-link" 
+          aria-label="Instagram'da Güzelyalı Dönercisi"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          <span>Instagram'da Takip Edin</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 2. Sütun: Hızlı Bağlantılar -->
+    <div class="footer-col">
+      <h3 class="footer-heading">Keşfedin</h3>
+      <ul class="footer-links">
+        <li><a href="/">Ana Sayfa</a></li>
+        <li><a href="/menu">Lezzet Menümüz</a></li>
+        <li><a href="/hakkimizda">Hakkımızda</a></li>
+        <li><a href="/lezzetimiz">Döner Ustalığımız</a></li>
+        <li><a href="/galeri">Görsel Galeri</a></li>
+        <li><a href="/iletisim">İletişim & Konum</a></li>
+      </ul>
+    </div>
+
+    <!-- 3. Sütun: Çalışma & Durum -->
+    <div class="footer-col">
+      <h3 class="footer-heading">Çalışma Saatleri</h3>
+      <p class="opening-notice">
+        {businessConfig.hours.statusNote}
+      </p>
+      <ul class="schedule-list">
+        {businessConfig.hours.schedule.map((h) => (
+          <li>
+            <span class="day-label">{h.days}</span>
+            <span class="hour-label">{h.hours}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="opening-status-chip">
+        <span class="chip-dot"></span>
+        {businessConfig.openingStatusText}
+      </div>
+    </div>
+
+    <!-- 4. Sütun: Konum & İletişim -->
+    <div class="footer-col contact-col">
+      <h3 class="footer-heading">Adres & Ulaşım</h3>
+      <address class="footer-address">
+        <p class="address-line">
+          <strong>Adres:</strong><br />
+          {businessConfig.contact.address.fullText}
+        </p>
+        <p class="email-line">
+          <strong>E-posta:</strong><br />
+          <a href={`mailto:${businessConfig.contact.email}`}>{businessConfig.contact.email}</a>
+        </p>
+      </address>
+      <div class="footer-cta-wrapper">
+        <a 
+          href={businessConfig.contact.googleMapsUrl} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn btn-secondary btn-sm"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+          </svg>
+          Google Haritalar Yol Tarifi
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alt Telif & Bilgilendirme Satırı -->
+  <div class="footer-bottom">
+    <div class="container bottom-container">
+      <p class="copyright">
+        © {currentYear} {businessConfig.brandName}. Tüm hakları saklıdır.
+      </p>
+      <p class="origin-note">
+        Güzelyalı Mahallesi, Çukurova / Adana
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: #171210;
+    color: #FAF7F2;
+    padding-top: 64px;
+    border-top: 3px solid var(--color-burgundy);
+  }
+
+  .footer-container {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr 1fr 1.2fr;
+    gap: 48px;
+    padding-bottom: 56px;
+  }
+
+  .brand-col .brand-title {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #FAF7F2;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+  }
+
+  .brand-col .brand-subtitle {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--color-brass);
+    margin-bottom: 16px;
+  }
+
+  .brand-description {
+    color: #B5A8A3;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    margin-bottom: 22px;
+  }
+
+  .footer-socials {
+    display: flex;
+    align-items: center;
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #FAF7F2;
+    background-color: rgba(255, 255, 255, 0.06);
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all var(--transition-fast);
+  }
+
+  .social-link:hover {
+    background-color: var(--color-burgundy);
+    border-color: var(--color-burgundy);
+    color: #FFFFFF;
+  }
+
+  .footer-heading {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #FAF7F2;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 8px;
+  }
+
+  .footer-heading::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 28px;
+    height: 2px;
+    background-color: var(--color-brass);
+  }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-links a {
+    color: #B5A8A3;
+    font-size: 0.92rem;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    display: inline-block;
+  }
+
+  .footer-links a:hover {
+    color: #FFFFFF;
+    transform: translateX(4px);
+  }
+
+  .opening-notice {
+    font-size: 0.85rem;
+    color: #9C8E89;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 0.9rem;
+    margin-bottom: 18px;
+  }
+
+  .schedule-list li {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-bottom: 6px;
+    color: #D1C5C0;
+  }
+
+  .schedule-list .day-label {
+    font-weight: 500;
+  }
+
+  .schedule-list .hour-label {
+    color: var(--color-brass);
+    font-weight: 600;
+  }
+
+  .opening-status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(184, 139, 74, 0.12);
+    border: 1px solid rgba(184, 139, 74, 0.35);
+    color: #E2B975;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .chip-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #E2B975;
+  }
+
+  .footer-address {
+    font-style: normal;
+    font-size: 0.92rem;
+    color: #B5A8A3;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    line-height: 1.55;
+    margin-bottom: 20px;
+  }
+
+  .footer-address strong {
+    color: #FAF7F2;
+  }
+
+  .footer-address a {
+    color: var(--color-brass);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .footer-bottom {
+    background-color: #0E0B0A;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.85rem;
+    color: #8C7E79;
+  }
+
+  .bottom-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  @media (max-width: 992px) {
+    .footer-container {
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .footer-container {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .bottom-container {
+      flex-direction: column;
+      text-align: center;
+      gap: 8px;
+    }
+  }
+</style>

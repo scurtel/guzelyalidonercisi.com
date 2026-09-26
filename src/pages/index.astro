@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import BrandStorySection from '@/components/BrandStorySection.astro';
+import SignatureDishes from '@/components/SignatureDishes.astro';
+import NeYesemAssistant from '@/components/NeYesemAssistant.astro';
+import WhyUs from '@/components/WhyUs.astro';
+import ExperienceSection from '@/components/ExperienceSection.astro';
+import LocationSection from '@/components/LocationSection.astro';
+import { businessConfig } from '@/config/business';
+
+const pageTitle = `${businessConfig.brandName} | Adana Güzelyalı'da Gerçek Döner Ustalığı`;
+const pageDescription = 'Adana Güzelyalı’da özenle dinlendirilmiş dana ve kuzu etinden hazırlanan yaprak et döner, iskender ve özel dürümler. Çok yakında hizmetinizdeyiz.';
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/"
+  type="restaurant"
+>
+  <Hero />
+  <BrandStorySection />
+  <SignatureDishes />
+  <NeYesemAssistant />
+  <WhyUs />
+  <ExperienceSection />
+  <LocationSection />
+</BaseLayout>

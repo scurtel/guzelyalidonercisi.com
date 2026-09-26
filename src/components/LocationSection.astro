@@ -1,0 +1,213 @@
+---
+import { businessConfig } from '@/config/business';
+---
+
+<section class="location-section" id="konum" aria-label="Konum ve Ulaşım">
+  <div class="container">
+    <div class="location-card">
+      <div class="location-info">
+        <span class="badge badge-brass">Çukurova’nın Merkezinde</span>
+        <h2 class="location-title">Adana Güzelyalı’da <br /><span class="text-burgundy">Kolay Ulaşılabilir</span> Konum</h2>
+        
+        <p class="location-desc">
+          Güzelyalı Dönercisi; Çukurova’nın en nezih yerleşim ve bulvar akslarından biri olan Güzelyalı Mahallesi’nde misafirlerini ağırlayacak. Geniş otopark imkanı ve toplu taşıma hatlarına yakınlığıyla kolayca ulaşabilirsiniz.
+        </p>
+
+        <div class="location-details">
+          <div class="detail-box">
+            <div class="detail-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </div>
+            <div class="detail-text">
+              <strong>Bölge & Adres</strong>
+              <p>{businessConfig.contact.address.fullText}</p>
+              {!businessConfig.contact.address.hasExactAddress && (
+                <span class="exact-note">*(Açılış öncesi cadde & kapı no netleştiğinde yayınlanacaktır)</span>
+              )}
+            </div>
+          </div>
+
+          <div class="detail-box">
+            <div class="detail-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div class="detail-text">
+              <strong>Planlanan Çalışma Saatleri</strong>
+              <p>Haftanın 7 Günü: 11:30 - 22:30</p>
+              <span class="exact-note">{businessConfig.hours.statusNote}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="location-actions">
+          <a 
+            href={businessConfig.contact.googleMapsUrl} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary btn-lg"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+            </svg>
+            <span>Google Haritalar ile Yol Tarifi Al</span>
+          </a>
+
+          <a href="/iletisim" class="btn btn-secondary btn-lg">
+            <span>İletişim Bilgileri</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Harita Önizlemesi -->
+      <div class="location-map-wrap">
+        <iframe
+          src={businessConfig.contact.googleMapsEmbedUrl}
+          title="Güzelyalı Dönercisi Adana Güzelyalı Haritası"
+          width="100%"
+          height="100%"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          class="map-frame"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .location-section {
+    padding: 88px 0;
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .location-card {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 48px;
+    align-items: center;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 48px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .location-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .location-info .badge {
+    align-self: flex-start;
+  }
+
+  .location-title {
+    font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+    color: var(--color-ink);
+    line-height: 1.2;
+  }
+
+  .text-burgundy {
+    color: var(--color-burgundy);
+  }
+
+  .location-desc {
+    font-size: 1.05rem;
+    color: var(--color-ink-soft);
+    line-height: 1.7;
+  }
+
+  .location-details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 8px 0;
+  }
+
+  .detail-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+  }
+
+  .detail-icon {
+    color: var(--color-burgundy);
+    background-color: var(--color-burgundy-light);
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .detail-text strong {
+    display: block;
+    color: var(--color-ink);
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+  }
+
+  .detail-text p {
+    font-size: 0.9rem;
+    color: var(--color-ink-soft);
+  }
+
+  .exact-note {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--color-muted);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  .location-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 6px;
+  }
+
+  /* Harita Çerçevesi */
+  .location-map-wrap {
+    height: 100%;
+    min-height: 380px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .map-frame {
+    width: 100%;
+    height: 100%;
+    min-height: 380px;
+  }
+
+  @media (max-width: 992px) {
+    .location-card {
+      grid-template-columns: 1fr;
+      padding: 32px 24px;
+      gap: 36px;
+    }
+
+    .location-map-wrap {
+      min-height: 300px;
+    }
+  }
+</style>

@@ -1,0 +1,151 @@
+---
+const galleryHighlights = [
+  {
+    image: '/images/restaurant/salon.webp',
+    title: 'Huzurlu ve Şık Mekan',
+    subtitle: 'Güzelyalı’da ferah ve nezih yemek deneyimi',
+  },
+  {
+    image: '/images/craft/usta-kesim.webp',
+    title: 'İncecik Yaprak Kesim',
+    subtitle: 'Sipariş anında köz ateşinden tabağa',
+  },
+  {
+    image: '/images/menu/iskender.webp',
+    title: 'Kızgın Tereyağı Sunumu',
+    subtitle: 'Hakiki İskender kebabı ve manda yoğurdu',
+  },
+  {
+    image: '/images/menu/durum-doner.webp',
+    title: 'Tırnaklı Lavaş ve Köz Biber',
+    subtitle: 'Sıcak sarılan enfes et döner dürüm',
+  },
+];
+---
+
+<section class="experience-section" aria-label="Güzelyalı Dönercisi Deneyimi">
+  <div class="container">
+    <div class="section-header">
+      <span class="badge badge-brass">Göz Dolduran Ayrıntılar</span>
+      <h2>Lezzet ve Sunumun Uyumu</h2>
+      <div class="divider-brass"></div>
+      <p>
+        Göz alıcı sunumlarımız, tertemiz hazırlık mutfağımız ve samimi ortamımızla her detayda kaliteyi hissettiriyoruz.
+      </p>
+    </div>
+
+    <div class="experience-grid">
+      {galleryHighlights.map((item) => (
+        <div class="exp-card">
+          <div class="exp-image-wrap">
+            <img 
+              src={item.image} 
+              alt={item.title} 
+              width="800" 
+              height="600" 
+              loading="lazy" 
+              decoding="async" 
+            />
+            <div class="exp-overlay">
+              <span class="exp-title">{item.title}</span>
+              <span class="exp-sub">{item.subtitle}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="exp-action">
+      <a href="/galeri" class="btn btn-secondary">
+        <span>Tüm Fotoğrafları İnceleyin</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .experience-section {
+    padding: 88px 0;
+    background-color: var(--color-bg);
+  }
+
+  .experience-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .exp-card {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+  }
+
+  .exp-image-wrap {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .exp-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .exp-card:hover .exp-image-wrap img {
+    transform: scale(1.08);
+  }
+
+  .exp-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(28, 22, 20, 0.88) 0%, rgba(28, 22, 20, 0.1) 60%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    color: #FAF7F2;
+    transition: opacity var(--transition-base);
+  }
+
+  .exp-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #FAF7F2;
+    line-height: 1.25;
+  }
+
+  .exp-sub {
+    font-size: 0.78rem;
+    color: #D6CBC5;
+    margin-top: 4px;
+  }
+
+  .exp-action {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 992px) {
+    .experience-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .experience-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

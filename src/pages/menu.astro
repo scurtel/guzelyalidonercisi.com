@@ -1,0 +1,436 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NeYesemAssistant from '@/components/NeYesemAssistant.astro';
+import { menuCategories, menuItems } from '@/data/menu';
+import { businessConfig } from '@/config/business';
+
+const pageTitle = `Lezzet Menüsü | ${businessConfig.brandName} Adana`;
+const pageDescription = 'Güzelyalı Dönercisi menüsü: Odun ve köz ateşinde pişen hakiki yaprak et döner, lavaş dürümler, Bursa usulü İskender, taze mezeler ve Antep tatlıları.';
+
+const breadcrumbs = [
+  { name: 'Menü', url: '/menu' }
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/menu"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="menu-page-header">
+    <div class="container">
+      <span class="badge badge-brass">Güzelyalı Dönercisi Sofrası</span>
+      <h1>Lezzet Menümüz</h1>
+      <div class="divider-brass"></div>
+      <p class="menu-intro">
+        Tüm dönerlerimiz günlük olarak dinlendirilmiş yerli dana ve kuzu etinden taze şişe dizilerek hazırlanır.
+      </p>
+
+      <!-- Fiyat ve Açılış Bilgilendirme Notu -->
+      <div class="menu-notice-card">
+        <div class="notice-icon">📢</div>
+        <div class="notice-content">
+          <strong>Açılış Hazırlığı & Fiyatlandırma Bilgisi:</strong>
+          <span>Kapılarımızı açtığımız gün tüm gramaj seçenekleri ve güncel fiyatlarımız bu sayfada eksiksiz olarak yayınlanacaktır. Ürünlerimizin tamamı birinci sınıf malzemelerle hazırlanmaktadır.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kategori Filtreleri -->
+  <div class="category-nav-bar">
+    <div class="container">
+      <div class="category-tabs" role="tablist" aria-label="Menü Kategorileri">
+        <button class="cat-tab active" data-category="all" role="tab" aria-selected="true">
+          Tüm Menü
+        </button>
+        {menuCategories.map((cat) => (
+          <button class="cat-tab" data-category={cat.key} role="tab" aria-selected="false">
+            {cat.title}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Menü Ürünleri Listesi -->
+  <div class="menu-content-section">
+    <div class="container">
+      {menuCategories.map((cat) => {
+        const catItems = menuItems.filter((i) => i.category === cat.key);
+        if (catItems.length === 0) return null;
+
+        return (
+          <section class="menu-category-group" data-category-group={cat.key}>
+            <div class="cat-group-header">
+              <h2>{cat.title}</h2>
+              <p>{cat.description}</p>
+            </div>
+
+            <div class="menu-items-grid">
+              {catItems.map((item) => (
+                <article class="menu-item-card card">
+                  <div class="item-media">
+                    <img 
+                      src={item.image} 
+                      alt={item.name} 
+                      width="800" 
+                      height="600" 
+                      loading="lazy" 
+                      decoding="async" 
+                      class="item-img"
+                    />
+                    {item.signature && (
+                      <span class="signature-pill">İmza Lezzet</span>
+                    )}
+                  </div>
+
+                  <div class="item-body">
+                    <div class="item-top">
+                      <h3 class="item-name">{item.name}</h3>
+                      <span class="item-price-tag">{item.priceNote}</span>
+                    </div>
+
+                    <p class="item-desc">{item.description}</p>
+
+                    {item.preparationNote && (
+                      <p class="item-prep-note">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="12" y1="16" x2="12" y2="12"></line>
+                          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <span>{item.preparationNote}</span>
+                      </p>
+                    )}
+
+                    <div class="item-meta">
+                      {item.portion && (
+                        <span class="portion-badge">{item.portion}</span>
+                      )}
+                      {item.tags && item.tags.map((t) => (
+                        <span class="tag-badge">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        );
+      })}
+    </div>
+  </div>
+
+  <!-- Lezzet Danışmanı Entegrasyonu -->
+  <NeYesemAssistant />
+</BaseLayout>
+
+<style>
+  .menu-page-header {
+    padding: 64px 0 40px;
+    background-color: var(--color-surface);
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .menu-page-header h1 {
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    margin: 12px 0 6px;
+  }
+
+  .menu-intro {
+    font-size: 1.1rem;
+    color: var(--color-muted);
+    max-width: 640px;
+    margin: 0 auto 28px;
+  }
+
+  .menu-notice-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background-color: #FEF8ED;
+    border: 1px solid #F5DCAD;
+    border-radius: var(--radius-md);
+    padding: 16px 24px;
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .notice-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+  }
+
+  .notice-content strong {
+    display: block;
+    color: #9A5A05;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+  }
+
+  .notice-content span {
+    font-size: 0.88rem;
+    color: #6E4912;
+    line-height: 1.5;
+  }
+
+  /* Kategori Navigasyon Çubuğu */
+  .category-nav-bar {
+    position: sticky;
+    top: var(--header-height);
+    z-index: 100;
+    background-color: rgba(250, 247, 242, 0.96);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border);
+    padding: 12px 0;
+  }
+
+  .category-tabs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+
+  .category-tabs::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .category-tabs::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 4px;
+  }
+
+  .cat-tab {
+    padding: 10px 20px;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-ink-soft);
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .cat-tab:hover {
+    background-color: var(--color-surface-subtle);
+    border-color: var(--color-burgundy);
+    color: var(--color-burgundy);
+  }
+
+  .cat-tab.active {
+    background-color: var(--color-burgundy);
+    border-color: var(--color-burgundy);
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(122, 26, 34, 0.25);
+  }
+
+  /* Menü İçeriği */
+  .menu-content-section {
+    padding: 64px 0 88px;
+    background-color: var(--color-bg);
+  }
+
+  .menu-category-group {
+    margin-bottom: 64px;
+  }
+
+  .cat-group-header {
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .cat-group-header h2 {
+    font-size: 1.85rem;
+    color: var(--color-ink);
+    margin-bottom: 6px;
+  }
+
+  .cat-group-header p {
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+
+  .menu-items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+
+  .menu-item-card {
+    display: flex;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .item-media {
+    width: 220px;
+    min-width: 220px;
+    position: relative;
+    background-color: var(--color-surface-subtle);
+  }
+
+  .item-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-base);
+  }
+
+  .menu-item-card:hover .item-img {
+    transform: scale(1.05);
+  }
+
+  .signature-pill {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #B88B4A;
+    color: #FFFFFF;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .item-body {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 10px;
+  }
+
+  .item-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .item-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    line-height: 1.3;
+  }
+
+  .item-price-tag {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--color-muted);
+    background-color: var(--color-surface-subtle);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    border: 1px solid var(--color-border);
+  }
+
+  .item-desc {
+    font-size: 0.88rem;
+    color: var(--color-ink-soft);
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  .item-prep-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: #8C6D37;
+    background-color: #FAF5E8;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+  }
+
+  .item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--color-border-subtle);
+  }
+
+  .portion-badge {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    background-color: var(--color-surface-subtle);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .tag-badge {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--color-burgundy);
+    background-color: var(--color-burgundy-light);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (max-width: 900px) {
+    .menu-items-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .menu-item-card {
+      flex-direction: column;
+    }
+
+    .item-media {
+      width: 100%;
+      height: 200px;
+    }
+  }
+</style>
+
+<script>
+  function setupCategoryFiltering() {
+    const tabs = document.querySelectorAll('.cat-tab');
+    const groups = document.querySelectorAll('.menu-category-group');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach((t) => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        const cat = tab.getAttribute('data-category');
+
+        groups.forEach((group) => {
+          const groupEl = group as HTMLElement;
+          const groupCat = groupEl.getAttribute('data-category-group');
+
+          if (cat === 'all' || cat === groupCat) {
+            groupEl.style.display = 'block';
+          } else {
+            groupEl.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  setupCategoryFiltering();
+  document.addEventListener('astro:after-swap', setupCategoryFiltering);
+</script>

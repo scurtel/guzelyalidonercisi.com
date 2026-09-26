@@ -1,0 +1,16 @@
+{
+  "name": "Güzelyalı Dönercisi",
+  "short_name": "Güzelyalı Döner",
+  "description": "Adana Güzelyalı'da Gerçek Döner Ustalığı - Premium Yaprak Et Döner ve İskender Salonu",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF7F2",
+  "theme_color": "#7A1A22",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

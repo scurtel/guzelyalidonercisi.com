@@ -1,0 +1,131 @@
+---
+import { businessConfig } from '@/config/business';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  ogImage?: string;
+  type?: 'website' | 'restaurant' | 'article';
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  structuredData?: Record<string, any>;
+}
+
+const {
+  title = `${businessConfig.brandName} | Adana Güzelyalı'da Gerçek Döner Ustalığı`,
+  description = businessConfig.metaDescription,
+  canonicalPath = '',
+  ogImage = '/images/hero-doner.webp',
+  type = 'restaurant',
+  breadcrumbs = [],
+  structuredData,
+} = Astro.props;
+
+const siteUrl = businessConfig.site.url;
+const canonicalUrl = `${siteUrl}${canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`}`.replace(/\/$/, '') || siteUrl;
+const fullOgImageUrl = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+
+// Schema.org Restaurant / LocalBusiness JSON-LD
+const restaurantSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Restaurant',
+  '@id': `${siteUrl}/#restaurant`,
+  name: businessConfig.brandName,
+  legalName: businessConfig.legalName,
+  url: siteUrl,
+  image: fullOgImageUrl,
+  description: businessConfig.shortDescription,
+  servesCuisine: ['Turkish', 'Döner', 'Kebap'],
+  priceRange: '₺₺',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: businessConfig.contact.address.street,
+    addressLocality: 'Çukurova',
+    addressRegion: 'Adana',
+    postalCode: businessConfig.contact.address.postalCode,
+    addressCountry: 'TR',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: businessConfig.contact.coordinates.latitude,
+    longitude: businessConfig.contact.coordinates.longitude,
+  },
+  hasMap: businessConfig.contact.googleMapsUrl,
+  openingHoursSpecification: businessConfig.hours.schedule.map((h) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: h.days.includes('Pazar') ? ['Sunday'] : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    opens: h.opens,
+    closes: h.closes,
+  })),
+  menu: `${siteUrl}/menu`,
+  potentialAction: {
+    '@type': 'ViewAction',
+    target: `${siteUrl}/menu`,
+    name: 'Menüyü İncele',
+  },
+};
+
+// BreadcrumbList Schema
+const breadcrumbSchema = breadcrumbs.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Ana Sayfa',
+      item: siteUrl,
+    },
+    ...breadcrumbs.map((bc, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 2,
+      name: bc.name,
+      item: `${siteUrl}${bc.url.startsWith('/') ? bc.url : `/${bc.url}`}`,
+    })),
+  ],
+} : null;
+---
+
+<!-- Temel Meta Etiketleri -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+<meta name="robots" content="index, follow" />
+<meta name="author" content={businessConfig.site.author} />
+<meta name="theme-color" content={businessConfig.site.themeColor} />
+
+<!-- Favicon & PWA -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/favicon.svg" />
+<link rel="manifest" href="/site.webmanifest" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type === 'restaurant' ? 'restaurant.restaurant' : 'website'} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={fullOgImageUrl} />
+<meta property="og:site_name" content={businessConfig.brandName} />
+<meta property="og:locale" content={businessConfig.site.locale} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalUrl} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={fullOgImageUrl} />
+
+<!-- Preconnect Google Fonts for performance -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- Yapılandırılmış Veri (JSON-LD) -->
+<script type="application/ld+json" set:html={JSON.stringify(restaurantSchema)} />
+{breadcrumbSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+)}
+{structuredData && (
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+)}

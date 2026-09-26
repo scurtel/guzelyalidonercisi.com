@@ -1,0 +1,82 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { businessConfig } from '@/config/business';
+
+const pageTitle = `Sayfa Bulunamadı (404) | ${businessConfig.brandName}`;
+const pageDescription = 'Aradığınız sayfa bulunamadı. Güzelyalı Dönercisi ana sayfasına veya menümüze göz atabilirsiniz.';
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/404"
+>
+  <div class="error-page-section">
+    <div class="container">
+      <div class="error-card card">
+        <span class="error-code">404</span>
+        <div class="divider-brass"></div>
+        <h1>Aradığınız Sayfa Bulunamadı</h1>
+        <p class="error-text">
+          Ulaşmaya çalıştığınız sayfa taşınmış, silinmiş veya geçici olarak kullanım dışı olabilir. Köz ateşinde pişen nefis dönerlerimizi keşfetmek için ana sayfamıza dönebilirsiniz.
+        </p>
+
+        <div class="error-actions">
+          <a href="/" class="btn btn-primary btn-lg">
+            <span>Ana Sayfaya Dön</span>
+          </a>
+          <a href="/menu" class="btn btn-secondary btn-lg">
+            <span>Lezzet Menümüzü İnceleyin</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .error-page-section {
+    padding: 100px 0 120px;
+    background-color: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .error-card {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 64px 40px;
+    text-align: center;
+    background-color: var(--color-surface);
+  }
+
+  .error-code {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    font-weight: 700;
+    color: var(--color-burgundy);
+    line-height: 1;
+    display: block;
+  }
+
+  .error-card h1 {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    color: var(--color-ink);
+    margin-bottom: 16px;
+  }
+
+  .error-text {
+    font-size: 1.05rem;
+    color: var(--color-muted);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .error-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+</style>
