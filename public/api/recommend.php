@@ -219,8 +219,10 @@ $requestPayload = [
     ],
     'generationConfig' => [
         'temperature' => 0.4,
-        'maxOutputTokens' => 200,
-        'topP' => 0.8
+        'maxOutputTokens' => 1000,
+        'thinkingConfig' => [
+            'thinkingBudget' => 0
+        ]
     ]
 ];
 
