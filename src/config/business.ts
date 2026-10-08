@@ -102,13 +102,14 @@ export const businessConfig: BusinessConfig = {
       fullText: 'Güzelyalı Mahallesi, Çukurova / Adana, Türkiye',
       hasExactAddress: false, // Kesin dükkan numarası netleştiğinde güncellenir
     },
-    // Güzelyalı, Çukurova, Adana merkez koordinatları
+    // Güzelyalı Mahallesi Google Maps İşletme Profili ve Pin Koordinatları
+    // Profil: https://maps.app.goo.gl/XHxKeHS4UhTNiNWv6
     coordinates: {
-      latitude: 37.0392,
-      longitude: 35.3051,
+      latitude: 37.04887,
+      longitude: 35.29594,
     },
-    googleMapsUrl: 'https://maps.google.com/?q=G%C3%BCzelyal%C4%B1+Mahallesi+%C3%87ukurova+Adana',
-    googleMapsEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12743.832742918883!2d35.2974!3d37.0392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1528859942a731ef%3A0x6b5a34f9a0c242ef!2zR8O8emVseWFswLEsIDAxMTUwIMOHdWt1cm92YS9BZGFuYQ!5e0!3m2!1str!2str!4v1710000000000!5m2!1str!2str',
+    googleMapsUrl: 'https://maps.app.goo.gl/XHxKeHS4UhTNiNWv6',
+    googleMapsEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3184.361!2d35.29336!3d37.04887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x152889cc0ed16519%3A0xc9f41e67778d66d3!2zQWRhbmEgR8O8emVseWFswLEgRMO2bmVyY2lzaQ!5e0!3m2!1str!2str!4v1710000000000!5m2!1str!2str',
   },
 
   hours: {

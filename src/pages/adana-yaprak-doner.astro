@@ -1,0 +1,774 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { businessConfig } from '@/config/business';
+
+const pageTitle = 'Adana Yaprak Döner & Et Döner Ustalığı | Güzelyalı Dönercisi';
+const pageDescription = "Adana Çukurova Güzelyalı'da hakiki yaprak et döner ustalığı. Dinlendirilmiş yerli dana antrikot ve kuzu döş, köz ateşi, porsiyon ve lavaş dürüm lezzetleri.";
+
+const breadcrumbs = [
+  { name: 'Adana Yaprak Döner', url: '/adana-yaprak-doner' }
+];
+
+const faqItems = [
+  {
+    question: "Hakiki yaprak et döner nasıl anlaşılır?",
+    answer: "Hakiki yaprak dönerde et lif lif ayrılır; homojen, macun kıvamında kıyma dokusu bulunmaz. Bıçakla kesildiğinde ince yaprak tabakalar halinde düşer, kenarları nar gibi kızarmış, içi ise doğal suyunu kaybetmemiş pembe-kahve tonundadır."
+  },
+  {
+    question: "Güzelyalı Dönercisi'nde yaprak döner hangi etten hazırlanır?",
+    answer: "Özenle seçilmiş yerli besi dana antrikot ve but etleri, lezzet ve sululuk dengesini sağlayan kuzu döş etiyle harmanlanır. Hazır kıyma, soya katkısı veya mekanik ayrılmış et asla kullanılmaz."
+  },
+  {
+    question: "Etler pişirilmeden önce nasıl bir ön hazırlıktan geçer?",
+    answer: "Sinir ve fazla yağlarından temizlenen etler ince yapraklar halinde açılır. Doğal süt, sızma zeytinyağı ve taze baharatlarla hazırlanan özel marinasyonda en az 24 saat soğuk hava depolarında dinlendirilir."
+  },
+  {
+    question: "Yaprak döner hangi sunum seçenekleriyle servis edilir?",
+    answer: "Sıcak tırnak pide üzerinde tereyağlı sade porsiyon, tereyağlı şehriyeli pilav üstü et döner ve közlenmiş biber eşliğinde taze lavaş dürüm seçenekleri sunulmaktadır."
+  },
+  {
+    question: "Dönerin yanında hangi ikram ve mezeler yer alır?",
+    answer: "Közde pişmiş Adana biberi ve domates, sumaklı taze maydanozlu ince kıyım mor soğan salatası, fırından yeni çıkmış sıcak tırnaklı pide ve isteğe bağlı köpüklü yayık ayranı ikram edilir."
+  }
+];
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/adana-yaprak-doner"
+  breadcrumbs={breadcrumbs}
+  structuredData={structuredData}
+>
+  <div class="pillar-hero">
+    <div class="container">
+      <div class="pillar-hero-grid">
+        <div class="pillar-hero-content">
+          <span class="badge badge-brass">Geleneksel Yaprak Et Ustalığı</span>
+          <h1>Adana’da Hakiki <br /><span class="text-burgundy">Yaprak Et Döner</span> Lezzeti</h1>
+          <div class="divider-brass"></div>
+          <p class="pillar-lead">
+            Kıymasız, katkısız, yalnızca dinlendirilmiş yerli dana eti ve kuzu döşün doğal köz ateşinde ağır ağır mühürlenmesiyle hazırlanan geleneksel lezzet. Güzelyalı Dönercisi olarak Adana Çukurova’da etin en saf halini sunuyoruz.
+          </p>
+
+          <div class="hero-action-buttons">
+            <a href="/menu" class="btn btn-primary btn-lg">
+              <span>Menüyü İncele</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+            <a href="/rezervasyon" class="btn btn-secondary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+              </svg>
+              <span>Masa Rezervasyonu</span>
+            </a>
+            <a 
+              href={businessConfig.contact.googleMapsUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn btn-outline btn-lg"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+              </svg>
+              <span>Yol Tarifi</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="pillar-hero-media">
+          <div class="media-card">
+            <img 
+              src="/images/menu/yaprak-et-doner.webp" 
+              alt="Güzelyalı Dönercisi tırnak pide üzerinde servis edilen ince kesim hakiki Adana yaprak et döner" 
+              width="1200" 
+              height="800" 
+              loading="eager"
+              decoding="async"
+              class="pillar-img"
+            />
+            <div class="media-badge">
+              <strong>%100 Yaprak Et</strong>
+              <span>Kıymasız • Katkısız</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Yaprak Döner vs Kıyma Döner Karşılaştırması -->
+  <section class="section comparison-section" aria-label="Hakiki Yaprak Döner Farkı">
+    <div class="container">
+      <div class="section-header-center">
+        <span class="badge badge-burgundy">Farkı Hissedin</span>
+        <h2>Hakiki Yaprak Döneri Kıyma Dönerden Nasıl Ayırırsınız?</h2>
+        <div class="divider-brass"></div>
+        <p class="section-subtext">
+          Döner dünyasında kalite tesadüf değildir. Etin işlenme biçimi lezzeti, besleyiciliği ve damakta bıraktığı hissi doğrudan belirler.
+        </p>
+      </div>
+
+      <div class="comparison-grid">
+        <div class="comparison-col card genuine-col">
+          <div class="col-header">
+            <span class="icon-tag">🥩</span>
+            <h3>Hakiki Yaprak Et Döner</h3>
+            <span class="status-badge positive">Güzelyalı Dönercisi Standardı</span>
+          </div>
+          <ul class="comparison-list">
+            <li>
+              <strong>Et Dokusu:</strong> Bıçakla kesildiğinde et lifleri ve yaprak katmanları belirgin şekilde görülür.
+            </li>
+            <li>
+              <strong>İçerik Şeffaflığı:</strong> Sadece dinlendirilmiş dana antrikot, but ve kuzu eti kullanılır; kıyma harcı girmez.
+            </li>
+            <li>
+              <strong>Aromatik Denge:</strong> Etin kendi doğal yağı ve marinasyon sütü pişerken lezzet verir; yapay tatlandırıcı içermez.
+            </li>
+            <li>
+              <strong>Pişme Karakteri:</strong> Köz ateşinde dışı karamelize olurken içi sulu ve yumuşacık kalır.
+            </li>
+          </ul>
+        </div>
+
+        <div class="comparison-col card processed-col">
+          <div class="col-header">
+            <span class="icon-tag">⚠️</span>
+            <h3>Endüstriyel Kıyma Döner</h3>
+            <span class="status-badge warning">Fast-Food Karışımları</span>
+          </div>
+          <ul class="comparison-list">
+            <li>
+              <strong>Et Dokusu:</strong> Süngerimsi, homojen ve kauçuksu bir yapı sergiler; et lifleri seçilemez.
+            </li>
+            <li>
+              <strong>İçerik Şeffaflığı:</strong> Kıymaya karıştırılan soya unu, ekmek içi ve bağlayıcı katkılar hacim artırmak için kullanılır.
+            </li>
+            <li>
+              <strong>Aromatik Denge:</strong> Yoğun tuz ve sentetik baharatlarla etin eksik lezzeti bastırılmaya çalışılır.
+            </li>
+            <li>
+              <strong>Pişme Karakteri:</strong> Ateşten çıktığında hızla kurur, sertleşir ve ağır bir yağ tabakası bırakır.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ustalık ve Marinasyon Aşamaları -->
+  <section class="section craft-detail-section" aria-label="Marinasyon ve Ustalık">
+    <div class="container">
+      <div class="content-split-grid">
+        <div class="split-text">
+          <span class="badge badge-brass">Adana Ustalığı</span>
+          <h2>24 Saatlik Sabır: Terbiye ve Şiş Dizim Zanaati</h2>
+          <div class="divider-brass"></div>
+          <p>
+            Adana'da et ustalığı, aceleye getirilmiş yöntemleri kabul etmez. Güzelyalı Dönercisi mutfağında hazırlıklarımız bir gün önceden başlar. Usta kasaplarımız tarafından sinirleri milimetrik titizlikle temizlenen dana parçaları, yaprak inceliğinde açılır.
+          </p>
+          <p>
+            Etler; yerel çiftlik sütü, soğuk sıkım zeytinyağı, soğan suyu ve taş değirmen baharatlarıyla yoğrulur. 24 saatlik soğuk dinlenme sürecinde etin lifleri gevşer, kendine has yumuşaklığına ve derin aromasına kavuşur.
+          </p>
+
+          <div class="craft-mini-cards">
+            <div class="mini-card">
+              <span class="mini-icon">🌿</span>
+              <div>
+                <strong>Doğal Terbiye</strong>
+                <p>Koruyucu veya katkı maddesi içermeyen saf baharat ve süt marinasyonu.</p>
+              </div>
+            </div>
+            <div class="mini-card">
+              <span class="mini-icon">🔥</span>
+              <div>
+                <strong>Meşe Kömürü Isısı</strong>
+                <p>Direkt alevle yakmadan, közün yaydığı dengeli ısıyla etin suyunu içine hapsetme.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="split-media">
+          <img 
+            src="/images/craft/marine-et.webp" 
+            alt="Özel süt ve taze baharat marinasyonunda 24 saat dinlendirilen yaprak etler" 
+            width="1000" 
+            height="700" 
+            loading="lazy" 
+            decoding="async" 
+            class="rounded-image"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Porsiyon ve Sunum Çeşitleri -->
+  <section class="section varieties-section" aria-label="Sunum Çeşitleri">
+    <div class="container">
+      <div class="section-header-center">
+        <span class="badge badge-brass">Sofra Seçenekleri</span>
+        <h2>Yaprak Dönerimizi Nasıl Tercih Edersiniz?</h2>
+        <div class="divider-brass"></div>
+        <p class="section-subtext">
+          Günün her saatinde damak zevkinize uygun farklı porsiyon ve servis biçimleri.
+        </p>
+      </div>
+
+      <div class="varieties-grid">
+        <article class="variety-card card">
+          <div class="card-img-wrap">
+            <img 
+              src="/images/menu/yaprak-et-doner.webp" 
+              alt="Porsiyon Yaprak Et Döner" 
+              width="600" 
+              height="400" 
+              loading="lazy" 
+              decoding="async"
+            />
+          </div>
+          <div class="card-content">
+            <h3>Güzelyalı Yaprak Döner (Porsiyon)</h3>
+            <p>
+              Fırından sıcak çıkan tereyağlı tırnak pide yatağında, közlenmiş Adana biberi, domates ve sumaklı soğan eşliğinde klasik ziyafet.
+            </p>
+            <div class="card-meta">
+              <span class="portion-badge">120g / 150g Seçenekleri</span>
+              <a href="/menu" class="card-link">Menüde Gör →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="variety-card card">
+          <div class="card-img-wrap">
+            <img 
+              src="/images/menu/pilav-ustu-doner.webp" 
+              alt="Tereyağlı Pilav Üstü Et Döner" 
+              width="600" 
+              height="400" 
+              loading="lazy" 
+              decoding="async"
+            />
+          </div>
+          <div class="card-content">
+            <h3>Tereyağlı Pilav Üstü Döner</h3>
+            <p>
+              Tane tane dökülen tereyağlı şehriyeli pirinç pilavının üzerine cömertçe dizilen yaprak et dilimleri. Doyurucu ve dengeli bir öğün.
+            </p>
+            <div class="card-meta">
+              <span class="portion-badge">Özel Pilav Sunumu</span>
+              <a href="/menu" class="card-link">Menüde Gör →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="variety-card card">
+          <div class="card-img-wrap">
+            <img 
+              src="/images/menu/durum-doner.webp" 
+              alt="Özel Lavaş Yaprak Döner Dürüm" 
+              width="600" 
+              height="400" 
+              loading="lazy" 
+              decoding="async"
+            />
+          </div>
+          <div class="card-content">
+            <h3>Özel Lavaş Yaprak Dürüm</h3>
+            <p>
+              İncecik sıcak lavaşa sarılan yaprak et döner, köz biber, hafif sumaklı maydanozlu soğan ve isteğe göre kaşar peyniri dokunuşu.
+            </p>
+            <div class="card-meta">
+              <span class="portion-badge">Tek / Duble Lavaş</span>
+              <a href="/menu" class="card-link">Menüde Gör →</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sıkça Sorulan Sorular (FAQ) -->
+  <section class="section faq-section" aria-label="Sıkça Sorulan Sorular">
+    <div class="container">
+      <div class="section-header-center">
+        <span class="badge badge-burgundy">Merak Edilenler</span>
+        <h2>Adana Yaprak Döner Hakkında Sıkça Sorulan Sorular</h2>
+        <div class="divider-brass"></div>
+        <p class="section-subtext">
+          Lezzetimiz, et seçimimiz ve servis standartlarımız hakkında tüm ayrıntılar.
+        </p>
+      </div>
+
+      <div class="faq-container">
+        {faqItems.map((faq, idx) => (
+          <details class="faq-accordion-item card" open={idx === 0}>
+            <summary class="faq-question">
+              <span class="q-icon">?</span>
+              <span class="q-text">{faq.question}</span>
+              <span class="chevron">▾</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{faq.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Alt Çağrı Kartı -->
+  <section class="section cta-banner-section" aria-label="Rezervasyon ve İletişim">
+    <div class="container">
+      <div class="cta-banner card">
+        <div class="cta-banner-text">
+          <h2>Adana Çukurova’da Gerçek Yaprak Döneri Keşfedin</h2>
+          <p>
+            Güzelyalı Dönercisi olarak çok yakında salonumuzda sizleri ağırlamaya hazırlanıyoruz. Menümüzü inceleyin veya konumuza göz atın.
+          </p>
+        </div>
+        <div class="cta-banner-actions">
+          <a href="/menu" class="btn btn-primary btn-lg">Menüyü İncele</a>
+          <a href="/rezervasyon" class="btn btn-secondary btn-lg">Masa Rezervasyonu</a>
+          <a href="/adana-doner-rehberi" class="btn btn-outline btn-lg">Döner Rehberini Oku</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pillar-hero {
+    padding: 72px 0 56px;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .pillar-hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .pillar-lead {
+    font-size: 1.12rem;
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+    margin: 20px 0 32px;
+  }
+
+  .hero-action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .media-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--color-border);
+  }
+
+  .pillar-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .media-badge {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: rgba(23, 18, 16, 0.92);
+    backdrop-filter: blur(8px);
+    color: #FAF7F2;
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--color-brass);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .media-badge strong {
+    font-size: 1.05rem;
+    color: var(--color-brass);
+  }
+
+  .media-badge span {
+    font-size: 0.82rem;
+    opacity: 0.85;
+  }
+
+  .section {
+    padding: 80px 0;
+  }
+
+  .section-header-center {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 52px;
+  }
+
+  .section-subtext {
+    font-size: 1.05rem;
+    color: var(--color-ink-soft);
+    margin-top: 14px;
+    line-height: 1.65;
+  }
+
+  /* Karşılaştırma Izgarası */
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .comparison-col {
+    padding: 36px 32px;
+    border-radius: var(--radius-lg);
+  }
+
+  .genuine-col {
+    background: linear-gradient(180deg, #FAF7F2 0%, #FFFFFF 100%);
+    border: 2px solid var(--color-brass);
+    box-shadow: var(--shadow-md);
+  }
+
+  .processed-col {
+    background-color: #FAFAFA;
+    border: 1px solid var(--color-border);
+    opacity: 0.92;
+  }
+
+  .col-header {
+    margin-bottom: 24px;
+  }
+
+  .icon-tag {
+    font-size: 2rem;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .col-header h3 {
+    font-size: 1.45rem;
+    color: var(--color-ink);
+    margin-bottom: 8px;
+  }
+
+  .status-badge {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .status-badge.positive {
+    background-color: var(--color-burgundy-light);
+    color: var(--color-burgundy);
+  }
+
+  .status-badge.warning {
+    background-color: #FEE2E2;
+    color: #991B1B;
+  }
+
+  .comparison-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .comparison-list li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-ink-soft);
+  }
+
+  .comparison-list li strong {
+    color: var(--color-ink);
+  }
+
+  /* Ustalık Bölümü */
+  .content-split-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .split-text p {
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+    margin-bottom: 16px;
+  }
+
+  .craft-mini-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 28px;
+  }
+
+  .mini-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .mini-icon {
+    font-size: 1.5rem;
+  }
+
+  .mini-card strong {
+    display: block;
+    color: var(--color-ink);
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+
+  .mini-card p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+    margin: 0;
+  }
+
+  .rounded-image {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+  }
+
+  /* Çeşitler */
+  .varieties-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  .variety-card {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .variety-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .card-img-wrap img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .card-content h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: var(--color-ink);
+  }
+
+  .card-content p {
+    font-size: 0.92rem;
+    color: var(--color-ink-soft);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .portion-badge {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-muted);
+  }
+
+  .card-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-burgundy);
+  }
+
+  /* FAQ */
+  .faq-container {
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .faq-accordion-item {
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+  }
+
+  .faq-question {
+    padding: 20px 24px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--color-ink);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    user-select: none;
+    list-style: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .q-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--color-brass-light);
+    color: var(--color-brass);
+    font-weight: 800;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .q-text {
+    flex: 1;
+  }
+
+  .chevron {
+    font-size: 1.2rem;
+    color: var(--color-muted);
+    transition: transform var(--transition-fast);
+  }
+
+  details[open] .chevron {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding: 0 24px 22px 66px;
+  }
+
+  .faq-answer p {
+    font-size: 0.96rem;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+    margin: 0;
+  }
+
+  /* CTA Banner */
+  .cta-banner {
+    background: linear-gradient(135deg, #171210 0%, #2A1F1B 100%);
+    color: #FAF7F2;
+    padding: 56px 48px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    border-left: 5px solid var(--color-brass);
+  }
+
+  .cta-banner-text h2 {
+    color: #FAF7F2;
+    font-size: 1.9rem;
+    margin-bottom: 12px;
+  }
+
+  .cta-banner-text p {
+    color: #E2DAD0;
+    font-size: 1.02rem;
+    line-height: 1.6;
+    max-width: 580px;
+    margin: 0;
+  }
+
+  .cta-banner-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 992px) {
+    .pillar-hero-grid,
+    .content-split-grid,
+    .comparison-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+
+    .varieties-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .cta-banner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 40px 28px;
+    }
+  }
+</style>

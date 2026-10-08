@@ -22,11 +22,14 @@ const {
 } = Astro.props;
 
 const siteUrl = businessConfig.site.url;
-const canonicalUrl = `${siteUrl}${canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`}`.replace(/\/$/, '') || siteUrl;
+const rawPath = canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`;
+const canonicalUrl = (rawPath === '/' || rawPath === '') 
+  ? siteUrl 
+  : `${siteUrl}${rawPath.endsWith('/') ? rawPath : `${rawPath}/`}`;
 const fullOgImageUrl = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
 
 // Schema.org Restaurant / LocalBusiness JSON-LD
-const restaurantSchema = {
+const restaurantSchema: Record<string, any> = {
   '@context': 'https://schema.org',
   '@type': 'Restaurant',
   '@id': `${siteUrl}/#restaurant`,
@@ -35,7 +38,7 @@ const restaurantSchema = {
   url: siteUrl,
   image: fullOgImageUrl,
   description: businessConfig.shortDescription,
-  servesCuisine: ['Turkish', 'Döner', 'Kebap'],
+  servesCuisine: ['Turkish', 'Yaprak Et Döner', 'Döner', 'İskender', 'Kebap'],
   priceRange: '₺₺',
   address: {
     '@type': 'PostalAddress',
@@ -51,25 +54,32 @@ const restaurantSchema = {
     longitude: businessConfig.contact.coordinates.longitude,
   },
   hasMap: businessConfig.contact.googleMapsUrl,
+  sameAs: [
+    businessConfig.social.instagram,
+    'https://maps.app.goo.gl/XHxKeHS4UhTNiNWv6',
+    'https://www.google.com/maps/place/Adana+G%C3%BCzelyal%C4%B1+D%C3%B6nercisi+-+Me%C5%9Fhur+Adana+D%C3%B6ner/@37.0488743,35.2933616,17z/data=!3m1!4b1!4m6!3m5!1s0x152889cc0ed16519:0xc9f41e67778d66d3!8m2!3d37.04887!4d35.2959419!16s%2Fg%2F11hz334skl'
+  ].filter(Boolean),
   openingHoursSpecification: businessConfig.hours.schedule.map((h) => ({
     '@type': 'OpeningHoursSpecification',
-    dayOfWeek: h.days.includes('Pazar') ? ['Sunday'] : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    dayOfWeek: h.days.trim() === 'Pazar' 
+      ? ['Sunday'] 
+      : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     opens: h.opens,
     closes: h.closes,
   })),
-  menu: `${siteUrl}/menu`,
+  menu: `${siteUrl}/menu/`,
   acceptsReservations: businessConfig.reservations?.enabled ? 'True' : 'False',
   potentialAction: [
     {
       '@type': 'ViewAction',
-      target: `${siteUrl}/menu`,
+      target: `${siteUrl}/menu/`,
       name: 'Menüyü İncele',
     },
     ...(businessConfig.reservations?.enabled ? [{
       '@type': 'ReserveAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${siteUrl}/rezervasyon`,
+        urlTemplate: `${siteUrl}/rezervasyon/`,
         inLanguage: 'tr-TR',
         actionPlatform: [
           'http://schema.org/DesktopWebPlatform',
@@ -95,12 +105,16 @@ const breadcrumbSchema = breadcrumbs.length > 0 ? {
       name: 'Ana Sayfa',
       item: siteUrl,
     },
-    ...breadcrumbs.map((bc, idx) => ({
-      '@type': 'ListItem',
-      position: idx + 2,
-      name: bc.name,
-      item: `${siteUrl}${bc.url.startsWith('/') ? bc.url : `/${bc.url}`}`,
-    })),
+    ...breadcrumbs.map((bc, idx) => {
+      const bUrl = bc.url.startsWith('/') ? bc.url : `/${bc.url}`;
+      const itemUrl = bUrl === '/' ? siteUrl : `${siteUrl}${bUrl.endsWith('/') ? bUrl : `${bUrl}/`}`;
+      return {
+        '@type': 'ListItem',
+        position: idx + 2,
+        name: bc.name,
+        item: itemUrl,
+      };
+    }),
   ],
 } : null;
 ---

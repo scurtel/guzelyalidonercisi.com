@@ -10,6 +10,27 @@ const pageDescription = 'Güzelyalı Dönercisi menüsü: Odun ve köz ateşinde
 const breadcrumbs = [
   { name: 'Menü', url: '/menu' }
 ];
+
+const menuStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Menu',
+  name: `${businessConfig.brandName} Lezzet Menüsü`,
+  description: pageDescription,
+  inLanguage: 'tr-TR',
+  hasMenuSection: menuCategories.map((cat) => ({
+    '@type': 'MenuSection',
+    name: cat.title,
+    description: cat.description,
+    hasMenuItem: menuItems
+      .filter((item) => item.category === cat.key)
+      .map((dish) => ({
+        '@type': 'MenuItem',
+        name: dish.name,
+        description: dish.description,
+        image: `${businessConfig.site.url}${dish.image}`,
+      }))
+  }))
+};
 ---
 
 <BaseLayout
@@ -17,6 +38,7 @@ const breadcrumbs = [
   description={pageDescription}
   canonicalPath="/menu"
   breadcrumbs={breadcrumbs}
+  structuredData={menuStructuredData}
 >
   <div class="menu-page-header">
     <div class="container">

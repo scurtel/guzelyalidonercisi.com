@@ -24,6 +24,10 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} (.+)/$
 RewriteRule ^ %1 [R=301,L]
 
+# 5. Topikal Otorite Birleştirme & Eşdeğer Sayfa 301 Yönlendirmeleri
+RewriteRule ^adana-et-doner/?$ https://guzelyalidonercisi.com/adana-yaprak-doner/ [R=301,L]
+RewriteRule ^adana-doner-durum/?$ https://guzelyalidonercisi.com/adana-yaprak-doner/ [R=301,L]
+
 # 5. Özel 404 Hata Sayfası
 ErrorDocument 404 /404.html
 
