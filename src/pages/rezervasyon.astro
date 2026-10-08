@@ -1,0 +1,531 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ReservationForm from '@/components/ReservationForm.astro';
+import { businessConfig } from '@/config/business';
+
+const pageTitle = 'Masa Rezervasyonu | Güzelyalı Dönercisi Adana';
+const pageDescription = "Güzelyalı Dönercisi'nde sevdiklerinizle keyifli bir sofra için masa rezervasyonu talebinizi kolayca iletin.";
+
+const breadcrumbs = [
+  { name: 'Masa Rezervasyonu', url: '/rezervasyon' }
+];
+
+const isReservationsEnabled = businessConfig.reservations.enabled;
+
+// Dedicated FoodEstablishmentReservation / Restaurant structured data
+const reservationStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Restaurant',
+  '@id': `${businessConfig.site.url}/#restaurant`,
+  name: businessConfig.brandName,
+  url: businessConfig.site.url,
+  acceptsReservations: isReservationsEnabled ? 'True' : 'False',
+  ...(isReservationsEnabled ? {
+    potentialAction: {
+      '@type': 'ReserveAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${businessConfig.site.url}/rezervasyon`,
+        inLanguage: 'tr-TR',
+        actionPlatform: [
+          'http://schema.org/DesktopWebPlatform',
+          'http://schema.org/MobileWebPlatform'
+        ]
+      },
+      result: {
+        '@type': 'FoodEstablishmentReservation',
+        name: 'Masa Rezervasyonu'
+      }
+    }
+  } : {})
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/rezervasyon"
+  breadcrumbs={breadcrumbs}
+  structuredData={reservationStructuredData}
+>
+  <div class="reservation-page-hero">
+    <div class="container">
+      <span class="badge badge-brass">Güzelyalı Dönercisi Sofrası</span>
+      <h1>Güzelyalı Dönercisi Masa Rezervasyonu</h1>
+      <div class="divider-brass"></div>
+      <p class="reservation-lead">
+        Güzelyalı Dönercisi'nde sevdiklerinizle keyifli bir sofra için masa rezervasyonu talebinizi kolayca iletin.
+      </p>
+    </div>
+  </div>
+
+  <section class="reservation-content-section" aria-label="Rezervasyon Alanı">
+    <div class="container">
+      {isReservationsEnabled ? (
+        <div class="reservation-layout-grid">
+          <div class="form-column">
+            <ReservationForm />
+          </div>
+
+          <div class="info-column">
+            <div class="policy-card card">
+              <div class="policy-header">
+                <div class="policy-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                </div>
+                <h3>Rezervasyon Bilgilendirmesi</h3>
+              </div>
+
+              <div class="policy-list">
+                <div class="policy-item">
+                  <strong>Telefon ile Teyit</strong>
+                  <p>Web sitemiz üzerinden iletilen talepler, işletmemiz tarafından telefonla aranarak müsaitlik onaylandığında kesinleşir.</p>
+                </div>
+
+                <div class="policy-item">
+                  <strong>Şeffaf Müsaitlik</strong>
+                  <p>Tüm masalarımız taze servis akışına göre planlanır. Kullanıcılarımıza yanıltıcı sahte doluluk bilgisi gösterilmez.</p>
+                </div>
+
+                <div class="policy-item">
+                  <strong>Kalabalık Gruplar & Davetler</strong>
+                  <p>12 kişiden fazla misafir ağırlamalarınız ve özel organizasyonlar için doğrudan iletişim hattımızdan bize ulaşabilirsiniz.</p>
+                </div>
+
+                <div class="policy-item">
+                  <strong>Masa Bekleme Süresi</strong>
+                  <p>Rezervasyon saatinizden itibaren 15 dakika içinde ulaşılamayan masalar genel salon misafirlerimizin kullanımına açılabilir.</p>
+                </div>
+              </div>
+
+              <div class="policy-hours-box">
+                <h4>Servis & Rezervasyon Saatleri</h4>
+                <ul class="policy-hours-list">
+                  {businessConfig.hours.schedule.map((h) => (
+                    <li>
+                      <span>{h.days}</span>
+                      <strong>{h.hours}</strong>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div class="policy-actions">
+                <a 
+                  href="/iletisim" 
+                  class="btn btn-secondary btn-sm"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span>Konum & İletişim Sayfası</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div class="opening-soon-reservation card">
+          <div class="opening-badge-wrapper">
+            <span class="badge badge-opening-lg">
+              <span class="pulse-dot"></span>
+              Açılış Hazırlığı Sürüyor
+            </span>
+          </div>
+
+          <h2 class="opening-title">Rezervasyonlarımız Çok Yakında Açılıyor</h2>
+
+          <div class="divider-brass"></div>
+
+          <p class="opening-description">
+            Adana Çukurova Güzelyalı Mahallesi'nde hakiki odun ve köz ateşinde pişen yaprak et dönerimizi, sıcak tırnaklı pidelerimizi ve özenli ikramlarımızı sizlerle buluşturmak için salonumuzda ve mutfağımızda son hazırlıklarımızı tamamlıyoruz.
+          </p>
+
+          <div class="opening-info-grid">
+            <div class="opening-info-box">
+              <div class="info-box-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7A1A22" stroke-width="2">
+                  <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+                </svg>
+              </div>
+              <h4>Özenle Hazırlanan Lezzet</h4>
+              <p>Dana ve kuzu etinin en seçkin kısımları, günlük dinlendirme ve geleneksel şiş takma ustalığıyla hazırlanıyor.</p>
+            </div>
+
+            <div class="opening-info-box">
+              <div class="info-box-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B88B4A" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </div>
+              <h4>Güzelyalı'da Nezih Atmosfer</h4>
+              <p>Aileler, dost buluşmaları ve özel lezzet anları için ferah, modern ve tertemiz bir restoran deneyimi sunacağız.</p>
+            </div>
+
+            <div class="opening-info-box">
+              <div class="info-box-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7A1A22" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>
+              <h4>Teyitli & Güvenilir Rezervasyon</h4>
+              <p>Kapılarımızı açtığımız gün, bu sayfa üzerinden tarih ve saat seçerek masanızı önceden ayırtabileceksiniz.</p>
+            </div>
+          </div>
+
+          <div class="opening-notice-callout">
+            <div class="callout-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B88B4A" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+            </div>
+            <div class="callout-content">
+              <strong>Şeffaflık İlkesi:</strong>
+              <span>
+                Henüz açılışımız gerçekleşmediği için misafirlerimize kesinleşmiş izlenimi veren sahte rezervasyon onayı sunmuyoruz. Açılış duyurumuz ile birlikte online rezervasyon formumuz tam kapasiteyle aktif olacaktır.
+              </span>
+            </div>
+          </div>
+
+          <div class="opening-cta-group">
+            <a href="/menu" class="btn btn-primary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+              <span>Lezzet Menümüzü İnceleyin</span>
+            </a>
+
+            <a href="/iletisim" class="btn btn-secondary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>Konum & İletişim Bilgileri</span>
+            </a>
+
+            <a 
+              href={businessConfig.contact.googleMapsUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn btn-outline btn-lg"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+              </svg>
+              <span>Yol Tarifi Al</span>
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .reservation-page-hero {
+    padding: 64px 0 40px;
+    background-color: var(--color-surface);
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .reservation-page-hero h1 {
+    font-size: clamp(2.2rem, 4.2vw, 3.2rem);
+    color: var(--color-ink);
+    margin: 12px 0 6px;
+  }
+
+  .reservation-lead {
+    font-size: 1.15rem;
+    color: var(--color-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .reservation-content-section {
+    padding: 64px 0 96px;
+    background-color: var(--color-bg);
+  }
+
+  /* Aktif Rezervasyon Grid Düzeni */
+  .reservation-layout-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 40px;
+    align-items: flex-start;
+  }
+
+  /* Politika Kartı */
+  .policy-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 36px 30px;
+  }
+
+  .policy-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 24px;
+  }
+
+  .policy-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-brass-light);
+    color: var(--color-brass);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .policy-header h3 {
+    font-size: 1.25rem;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  .policy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+
+  .policy-item strong {
+    display: block;
+    font-size: 0.92rem;
+    color: var(--color-ink);
+    margin-bottom: 3px;
+  }
+
+  .policy-item p {
+    font-size: 0.88rem;
+    color: var(--color-muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .policy-hours-box {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .policy-hours-box h4 {
+    font-size: 0.95rem;
+    color: var(--color-ink);
+    margin-bottom: 12px;
+  }
+
+  .policy-hours-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .policy-hours-list li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    color: var(--color-ink-soft);
+    border-bottom: 1px dashed var(--color-border);
+    padding-bottom: 6px;
+  }
+
+  .policy-hours-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .policy-hours-list strong {
+    color: var(--color-burgundy);
+  }
+
+  .policy-actions {
+    display: flex;
+  }
+
+  /* Açılış Hazırlığı / Yakında Kartı */
+  .opening-soon-reservation {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 56px 44px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+  }
+
+  .opening-badge-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+
+  .badge-opening-lg {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #FEF7EA;
+    color: #9A5A05;
+    border: 1px solid #F5DBAC;
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #D97706;
+    border-radius: 50%;
+    animation: pulse 1.8s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 6px rgba(217, 119, 6, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
+  }
+
+  .opening-title {
+    font-size: clamp(2rem, 3.6vw, 2.7rem);
+    color: var(--color-ink);
+    margin-bottom: 12px;
+  }
+
+  .opening-description {
+    font-size: 1.1rem;
+    color: var(--color-ink-soft);
+    line-height: 1.7;
+    max-width: 740px;
+    margin: 0 auto 40px;
+  }
+
+  .opening-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 36px;
+    text-align: left;
+  }
+
+  .opening-info-box {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 24px 20px;
+  }
+
+  .info-box-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .opening-info-box h4 {
+    font-size: 1rem;
+    color: var(--color-ink);
+    margin-bottom: 8px;
+  }
+
+  .opening-info-box p {
+    font-size: 0.86rem;
+    color: var(--color-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .opening-notice-callout {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background-color: #FEF8ED;
+    border: 1px solid #F5DCAD;
+    border-radius: var(--radius-md);
+    padding: 18px 24px;
+    text-align: left;
+    margin-bottom: 40px;
+  }
+
+  .callout-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .callout-content strong {
+    display: block;
+    color: #9A5A05;
+    font-size: 0.92rem;
+    margin-bottom: 2px;
+  }
+
+  .callout-content span {
+    font-size: 0.88rem;
+    color: #6E4912;
+    line-height: 1.5;
+  }
+
+  .opening-cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  @media (max-width: 992px) {
+    .reservation-layout-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+
+    .opening-info-grid {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .opening-soon-reservation {
+      padding: 36px 20px;
+    }
+
+    .opening-cta-group {
+      flex-direction: column;
+    }
+
+    .opening-cta-group .btn {
+      width: 100%;
+    }
+  }
+</style>

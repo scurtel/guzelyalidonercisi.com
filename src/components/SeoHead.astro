@@ -58,11 +58,30 @@ const restaurantSchema = {
     closes: h.closes,
   })),
   menu: `${siteUrl}/menu`,
-  potentialAction: {
-    '@type': 'ViewAction',
-    target: `${siteUrl}/menu`,
-    name: 'Menüyü İncele',
-  },
+  acceptsReservations: businessConfig.reservations?.enabled ? 'True' : 'False',
+  potentialAction: [
+    {
+      '@type': 'ViewAction',
+      target: `${siteUrl}/menu`,
+      name: 'Menüyü İncele',
+    },
+    ...(businessConfig.reservations?.enabled ? [{
+      '@type': 'ReserveAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${siteUrl}/rezervasyon`,
+        inLanguage: 'tr-TR',
+        actionPlatform: [
+          'http://schema.org/DesktopWebPlatform',
+          'http://schema.org/MobileWebPlatform'
+        ]
+      },
+      result: {
+        '@type': 'FoodEstablishmentReservation',
+        name: 'Masa Rezervasyonu'
+      }
+    }] : [])
+  ],
 };
 
 // BreadcrumbList Schema

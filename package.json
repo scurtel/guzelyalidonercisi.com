@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "lint": "astro check",
+    "test": "node scripts/test-integration.mjs",
     "deploy:prep": "node scripts/package-deploy.mjs"
   },
   "dependencies": {

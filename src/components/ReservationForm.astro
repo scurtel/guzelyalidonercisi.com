@@ -1,0 +1,770 @@
+---
+/**
+ * Güzelyalı Dönercisi - Masa Rezervasyonu Formu Bileşeni
+ * 
+ * Özellikler:
+ * - 1-12 Kişi seçimi
+ * - Geçmiş tarih seçimi engelli (Bugünden başlayan takvim)
+ * - Müsait saat aralıkları
+ * - KVKK Aydınlatma Metni entegrasyonu (Modal pencereli)
+ * - Honeypot spam koruması
+ * - Asenkron /api/reservation.php iletişimi
+ */
+import { businessConfig } from '@/config/business';
+
+const allowedHours = businessConfig.reservations.allowedHours;
+const minGuests = businessConfig.reservations.minGuests;
+const maxGuests = businessConfig.reservations.maxGuests;
+---
+
+<div class="reservation-form-wrapper card">
+  <div class="form-header">
+    <div class="badge badge-brass">Masa Rezervasyon Talebi</div>
+    <h2 class="form-title">Sofranızı Önceden Ayırtın</h2>
+    <p class="form-subtitle">
+      Aşağıdaki formu doldurarak rezervasyon talebinizi iletebilirsiniz. Ekibimiz müsaitliği kontrol edip telefon numaranız üzerinden sizinle iletişime geçerek rezervasyonunuzu teyit edecektir.
+    </p>
+  </div>
+
+  <form id="reservationForm" class="reservation-form" novalidate>
+    <!-- Honeypot Bot Kapanı (İnsanlar görmez) -->
+    <div style="display:none !important;" aria-hidden="true">
+      <label for="rez_website_url">Web Sitesi</label>
+      <input type="text" id="rez_website_url" name="website_url" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <!-- 1. Satır: Ad Soyad & Telefon -->
+    <div class="form-grid-2">
+      <div class="form-group">
+        <label for="rezFullName" class="form-label">
+          Adınız ve Soyadınız <span class="required" aria-hidden="true">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="rezFullName" 
+          name="fullName" 
+          class="form-input" 
+          placeholder="Örn: Danyal Çilli" 
+          required 
+          minlength="2" 
+          maxlength="80" 
+          autocomplete="name"
+        />
+        <span class="field-error" id="rezFullNameError" role="alert"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="rezPhone" class="form-label">
+          Telefon Numaranız <span class="required" aria-hidden="true">*</span>
+        </label>
+        <input 
+          type="tel" 
+          id="rezPhone" 
+          name="phone" 
+          class="form-input" 
+          placeholder="Örn: 0532 123 45 67" 
+          required 
+          autocomplete="tel"
+        />
+        <span class="field-error" id="rezPhoneError" role="alert"></span>
+      </div>
+    </div>
+
+    <!-- 2. Satır: E-posta & Kişi Sayısı -->
+    <div class="form-grid-2">
+      <div class="form-group">
+        <label for="rezEmail" class="form-label">
+          E-posta Adresiniz <span class="optional">(İsteğe Bağlı)</span>
+        </label>
+        <input 
+          type="email" 
+          id="rezEmail" 
+          name="email" 
+          class="form-input" 
+          placeholder="Örn: adiniz@ornek.com" 
+          autocomplete="email"
+        />
+        <span class="field-error" id="rezEmailError" role="alert"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="rezGuests" class="form-label">
+          Kişi Sayısı <span class="required" aria-hidden="true">*</span>
+        </label>
+        <select id="rezGuests" name="guests" class="form-select" required>
+          <option value="" disabled selected>Kişi sayısı seçiniz</option>
+          {Array.from({ length: maxGuests - minGuests + 1 }, (_, i) => i + minGuests).map((num) => (
+            <option value={num}>{num} Kişi {num === 1 ? '(Tek Kişi)' : num >= 8 ? '(Geniş Masa)' : ''}</option>
+          ))}
+        </select>
+        <span class="field-error" id="rezGuestsError" role="alert"></span>
+      </div>
+    </div>
+
+    <!-- 3. Satır: Tarih & Saat Seçimi -->
+    <div class="form-grid-2">
+      <div class="form-group">
+        <label for="rezDate" class="form-label">
+          Rezervasyon Tarihi <span class="required" aria-hidden="true">*</span>
+        </label>
+        <input 
+          type="date" 
+          id="rezDate" 
+          name="date" 
+          class="form-input" 
+          required 
+        />
+        <span class="field-error" id="rezDateError" role="alert"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="rezTime" class="form-label">
+          Rezervasyon Saati <span class="required" aria-hidden="true">*</span>
+        </label>
+        <select id="rezTime" name="time" class="form-select" required>
+          <option value="" disabled selected>Saat seçiniz</option>
+          {allowedHours.map((hour) => (
+            <option value={hour}>{hour}</option>
+          ))}
+        </select>
+        <span class="field-error" id="rezTimeError" role="alert"></span>
+      </div>
+    </div>
+
+    <!-- 4. Satır: Özel Not / Talep -->
+    <div class="form-group">
+      <label for="rezNotes" class="form-label">
+        Özel Not / İstek <span class="optional">(İsteğe Bağlı)</span>
+      </label>
+      <textarea 
+        id="rezNotes" 
+        name="notes" 
+        class="form-textarea" 
+        placeholder="Bebek sandalyesi talebi, masa konumu tercihi veya alerjen hassasiyeti gibi notlarınızı iletebilirsiniz..."
+        maxlength="500"
+      ></textarea>
+      <div class="textarea-footer">
+        <span class="field-error" id="rezNotesError" role="alert"></span>
+        <span class="char-count" id="rezNotesCount">0 / 500</span>
+      </div>
+    </div>
+
+    <!-- 5. Satır: KVKK Aydınlatma Metni Onayı -->
+    <div class="form-group-checkbox">
+      <label class="checkbox-label" for="rezKvkk">
+        <input type="checkbox" id="rezKvkk" name="kvkkConsent" required />
+        <span class="checkbox-text">
+          <button type="button" id="openKvkkModal" class="btn-text-link">Kişisel verilerin işlenmesine ilişkin aydınlatma metnini</button> okudum ve rezervasyon talebimin işlenmesini kabul ediyorum. <span class="required" aria-hidden="true">*</span>
+        </span>
+      </label>
+      <span class="field-error" id="rezKvkkError" role="alert"></span>
+    </div>
+
+    <!-- Gönder Butonu -->
+    <div class="form-actions">
+      <button type="submit" id="rezSubmitBtn" class="btn btn-primary btn-lg btn-submit">
+        <span class="btn-text">Rezervasyon Talebini İlet</span>
+        <span class="btn-spinner" style="display: none;" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="animate-spin">
+            <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+            <path d="M12 2a10 10 0 0 1 10 10"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <!-- Durum Mesaj Kutusu -->
+    <div id="rezStatusBox" class="rez-status-box" style="display: none;" role="alert"></div>
+  </form>
+</div>
+
+<!-- KVKK Bilgilendirme Modalı -->
+<div id="kvkkModal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="kvkkModalTitle">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 id="kvkkModalTitle">Kişisel Verilerin İşlenmesi Aydınlatma Metni</h3>
+      <button type="button" id="closeKvkkModal" class="modal-close" aria-label="Kapat">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>
+        <strong>Güzelyalı Dönercisi</strong> olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca, veri sorumlusu sıfatıyla rezervasyon formumuz aracılığıyla paylaştığınız kişisel verilerinizin güvenliğine azami önem veriyoruz.
+      </p>
+      <h4>1. İşlenen Kişisel Verileriniz ve İşlenme Amacı</h4>
+      <p>
+        Bu form kapsamında tarafınızdan temin edilen <em>Ad Soyad, Telefon Numarası, E-posta Adresi (isteğe bağlı), Rezervasyon Tarihi ve Saati, Kişi Sayısı ve Rezervasyon Notu</em> verileriniz; masa rezervasyonunuzun organize edilmesi, müsaitlik kontrolü yapılması, rezervasyon teyidi için sizinle iletişime geçilmesi ve restoran hizmetlerimizin yürütülmesi amaçlarıyla sınırlı olarak işlenmektedir.
+      </p>
+      <h4>2. Verilerin Aktarımı ve Saklanması</h4>
+      <p>
+        Kişisel verileriniz üçüncü şahıslara ticari veya pazarlama amacıyla kesinlikle satılmaz ya da aktarılmaz. Yalnızca yasal zorunluluk hallerinde yetkili kamu kurum ve kuruluşları ile paylaşılabilir. Verileriniz, yasal saklama süreleri boyunca güvenli sunucu altyapımızda muhafaza edilir.
+      </p>
+      <h4>3. Haklarınız</h4>
+      <p>
+        KVKK'nın 11. maddesi uyarınca dilediğiniz zaman işletmemize başvurarak verilerinizin işlenip işlenmediğini öğrenme, yanlış işlenmişse düzeltilmesini talep etme veya silinmesini isteme hakkına sahipsiniz. Başvurularınızı <a href={`mailto:${businessConfig.contact.email}`}>{businessConfig.contact.email}</a> adresine iletebilirsiniz.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" id="confirmKvkkModal" class="btn btn-primary btn-sm">Anladım</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .reservation-form-wrapper {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 44px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .form-header {
+    margin-bottom: 32px;
+  }
+
+  .form-title {
+    font-size: clamp(1.8rem, 3.2vw, 2.3rem);
+    color: var(--color-ink);
+    margin: 12px 0 8px;
+  }
+
+  .form-subtitle {
+    font-size: 0.98rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    max-width: 720px;
+  }
+
+  .reservation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .required {
+    color: var(--color-burgundy);
+    font-weight: 700;
+  }
+
+  .optional {
+    color: var(--color-muted-light);
+    font-weight: 400;
+    font-size: 0.82rem;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-size: 0.95rem;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--color-burgundy);
+    box-shadow: 0 0 0 3px var(--color-burgundy-light);
+    outline: none;
+  }
+
+  .form-input.is-invalid, .form-select.is-invalid, .form-textarea.is-invalid {
+    border-color: #E53E3E;
+    background-color: #FFF5F5;
+  }
+
+  .form-textarea {
+    min-height: 110px;
+    resize: vertical;
+  }
+
+  .textarea-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+  }
+
+  .char-count {
+    font-size: 0.78rem;
+    color: var(--color-muted-light);
+    margin-left: auto;
+  }
+
+  .field-error {
+    font-size: 0.8rem;
+    color: #C53030;
+    min-height: 18px;
+    display: block;
+    line-height: 1.4;
+  }
+
+  /* KVKK Checkbox */
+  .form-group-checkbox {
+    margin: 8px 0;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    margin-top: 4px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-burgundy);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .checkbox-text {
+    font-size: 0.88rem;
+    color: var(--color-ink-soft);
+    line-height: 1.5;
+  }
+
+  .btn-text-link {
+    background: none;
+    border: none;
+    color: var(--color-burgundy);
+    text-decoration: underline;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+  }
+
+  .btn-text-link:hover {
+    color: var(--color-burgundy-hover);
+  }
+
+  .form-actions {
+    margin-top: 8px;
+  }
+
+  .btn-submit {
+    min-width: 240px;
+    padding: 16px 36px;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  /* Durum Kutuları */
+  .rez-status-box {
+    padding: 18px 24px;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-top: 16px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .rez-status-box.success {
+    background-color: #EDFDF2;
+    border: 1px solid #9AE6B4;
+    color: #1C4532;
+    box-shadow: 0 4px 14px rgba(72, 187, 120, 0.12);
+  }
+
+  .rez-status-box.error {
+    background-color: #FFF5F5;
+    border: 1px solid #FEB2B2;
+    color: #742A2A;
+  }
+
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(28, 22, 20, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-backdrop.open {
+    display: flex;
+  }
+
+  .modal-dialog {
+    background-color: #FFFFFF;
+    border-radius: var(--radius-lg);
+    max-width: 620px;
+    width: 100%;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    border: 1px solid var(--color-border);
+    animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .modal-header h3 {
+    font-size: 1.15rem;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color var(--transition-fast);
+  }
+
+  .modal-close:hover {
+    color: var(--color-ink);
+  }
+
+  .modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    font-size: 0.92rem;
+    color: var(--color-ink-soft);
+    line-height: 1.65;
+  }
+
+  .modal-body h4 {
+    font-size: 0.98rem;
+    color: var(--color-ink);
+    margin: 16px 0 6px;
+  }
+
+  .modal-body p {
+    margin-bottom: 12px;
+  }
+
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: flex-end;
+    background-color: var(--color-bg);
+    border-bottom-left-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+  }
+
+  @media (max-width: 768px) {
+    .reservation-form-wrapper {
+      padding: 28px 20px;
+    }
+
+    .form-grid-2 {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .btn-submit {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  function setupReservationForm() {
+    const form = document.getElementById('reservationForm') as HTMLFormElement | null;
+    if (!form) return;
+
+    const submitBtn = document.getElementById('rezSubmitBtn') as HTMLButtonElement | null;
+    const statusBox = document.getElementById('rezStatusBox') as HTMLElement | null;
+    const dateInput = document.getElementById('rezDate') as HTMLInputElement | null;
+    const notesInput = document.getElementById('rezNotes') as HTMLTextAreaElement | null;
+    const notesCount = document.getElementById('rezNotesCount') as HTMLElement | null;
+
+    // Minimum tarihi bugün olarak ayarla (Geçmiş tarih seçilemez)
+    if (dateInput) {
+      const today = new Date();
+      const pad = (n: number) => String(n).padStart(2, '0');
+      const todayStr = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+      dateInput.min = todayStr;
+      
+      // En fazla 60 gün sonrasına izin ver
+      const maxDate = new Date();
+      maxDate.setDate(maxDate.getDate() + 60);
+      const maxDateStr = `${maxDate.getFullYear()}-${pad(maxDate.getMonth() + 1)}-${pad(maxDate.getDate())}`;
+      dateInput.max = maxDateStr;
+
+      // Varsayılan olarak bugünü seç
+      if (!dateInput.value) {
+        dateInput.value = todayStr;
+      }
+    }
+
+    // Karakter Sayacı
+    if (notesInput && notesCount) {
+      notesInput.addEventListener('input', () => {
+        const len = notesInput.value.length;
+        notesCount.textContent = `${len} / 500`;
+      });
+    }
+
+    // Modal Yönetimi
+    const openModalBtn = document.getElementById('openKvkkModal');
+    const closeModalBtn = document.getElementById('closeKvkkModal');
+    const confirmModalBtn = document.getElementById('confirmKvkkModal');
+    const kvkkModal = document.getElementById('kvkkModal');
+    const kvkkCheckbox = document.getElementById('rezKvkk') as HTMLInputElement | null;
+
+    function openModal() {
+      if (kvkkModal) {
+        kvkkModal.classList.add('open');
+        kvkkModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeModal() {
+      if (kvkkModal) {
+        kvkkModal.classList.remove('open');
+        kvkkModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+    }
+
+    openModalBtn?.addEventListener('click', openModal);
+    closeModalBtn?.addEventListener('click', closeModal);
+    confirmModalBtn?.addEventListener('click', () => {
+      closeModal();
+      if (kvkkCheckbox) {
+        kvkkCheckbox.checked = true;
+      }
+    });
+
+    kvkkModal?.addEventListener('click', (e) => {
+      if (e.target === kvkkModal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && kvkkModal?.classList.contains('open')) {
+        closeModal();
+      }
+    });
+
+    // Form Gönderimi
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!submitBtn || !statusBox) return;
+
+      // Hata alanlarını temizle
+      const errorElements = form.querySelectorAll('.field-error');
+      errorElements.forEach((el) => { (el as HTMLElement).textContent = ''; });
+      const invalidInputs = form.querySelectorAll('.is-invalid');
+      invalidInputs.forEach((el) => el.classList.remove('is-invalid'));
+
+      // Değerleri oku
+      const fullNameInput = document.getElementById('rezFullName') as HTMLInputElement;
+      const phoneInput = document.getElementById('rezPhone') as HTMLInputElement;
+      const emailInput = document.getElementById('rezEmail') as HTMLInputElement;
+      const guestsInput = document.getElementById('rezGuests') as HTMLSelectElement;
+      const dateValInput = document.getElementById('rezDate') as HTMLInputElement;
+      const timeInput = document.getElementById('rezTime') as HTMLSelectElement;
+      const notesValInput = document.getElementById('rezNotes') as HTMLTextAreaElement;
+      const kvkkInput = document.getElementById('rezKvkk') as HTMLInputElement;
+      const honeypotInput = document.getElementById('rez_website_url') as HTMLInputElement;
+
+      let isValid = true;
+
+      // Ad Soyad
+      const fullName = fullNameInput.value.trim();
+      if (!fullName || fullName.length < 2) {
+        isValid = false;
+        fullNameInput.classList.add('is-invalid');
+        const err = document.getElementById('rezFullNameError');
+        if (err) err.textContent = 'Lütfen adınızı ve soyadınızı belirtin (en az 2 karakter).';
+      }
+
+      // Telefon
+      const phone = phoneInput.value.trim();
+      const phoneDigits = phone.replace(/[^\d+]/g, '');
+      if (!phone || phoneDigits.length < 10) {
+        isValid = false;
+        phoneInput.classList.add('is-invalid');
+        const err = document.getElementById('rezPhoneError');
+        if (err) err.textContent = 'Lütfen geçerli bir telefon numarası girin (örn: 0532 123 45 67).';
+      }
+
+      // E-posta (İsteğe bağlı, girilmişse format kontrolü)
+      const email = emailInput.value.trim();
+      if (email && (!email.includes('@') || !email.includes('.'))) {
+        isValid = false;
+        emailInput.classList.add('is-invalid');
+        const err = document.getElementById('rezEmailError');
+        if (err) err.textContent = 'Lütfen geçerli bir e-posta adresi yazın veya alanı boş bırakın.';
+      }
+
+      // Kişi sayısı
+      const guests = parseInt(guestsInput.value, 10);
+      if (!guests || guests < 1 || guests > 12) {
+        isValid = false;
+        guestsInput.classList.add('is-invalid');
+        const err = document.getElementById('rezGuestsError');
+        if (err) err.textContent = 'Lütfen kişi sayısı seçiniz.';
+      }
+
+      // Tarih
+      const date = dateValInput.value;
+      if (!date) {
+        isValid = false;
+        dateValInput.classList.add('is-invalid');
+        const err = document.getElementById('rezDateError');
+        if (err) err.textContent = 'Lütfen rezervasyon tarihi seçiniz.';
+      }
+
+      // Saat
+      const time = timeInput.value;
+      if (!time) {
+        isValid = false;
+        timeInput.classList.add('is-invalid');
+        const err = document.getElementById('rezTimeError');
+        if (err) err.textContent = 'Lütfen rezervasyon saati seçiniz.';
+      }
+
+      // KVKK
+      if (!kvkkInput.checked) {
+        isValid = false;
+        const err = document.getElementById('rezKvkkError');
+        if (err) err.textContent = 'Rezervasyon yapabilmek için aydınlatma metnini onaylamanız gerekmektedir.';
+      }
+
+      if (!isValid) {
+        return;
+      }
+
+      // Gönderim Animasyonu
+      submitBtn.disabled = true;
+      const btnText = submitBtn.querySelector('.btn-text') as HTMLElement | null;
+      const btnSpinner = submitBtn.querySelector('.btn-spinner') as HTMLElement | null;
+      if (btnText) btnText.style.display = 'none';
+      if (btnSpinner) btnSpinner.style.display = 'inline-block';
+      statusBox.style.display = 'none';
+
+      try {
+        const response = await fetch('/api/reservation.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fullName,
+            phone,
+            email,
+            date,
+            time,
+            guests,
+            notes: notesValInput.value.trim(),
+            kvkkConsent: kvkkInput.checked,
+            website_url: honeypotInput ? honeypotInput.value : ''
+          })
+        });
+
+        const result = await response.json().catch(() => ({
+          success: false,
+          error: 'Sunucudan geçersiz yanıt alındı.'
+        }));
+
+        if (response.ok && result.success) {
+          statusBox.className = 'rez-status-box success';
+          statusBox.innerHTML = `
+            <strong>Talebiniz Alındı!</strong><br />
+            ${result.message || 'Rezervasyon talebiniz alınmıştır. Rezervasyonunuz, işletmemiz tarafından onaylandığında kesinleşecektir.'}
+          `;
+          statusBox.style.display = 'block';
+          form.reset();
+          if (dateInput) {
+            const today = new Date();
+            const pad = (n: number) => String(n).padStart(2, '0');
+            dateInput.value = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+          }
+          if (notesCount) notesCount.textContent = '0 / 500';
+        } else {
+          statusBox.className = 'rez-status-box error';
+          statusBox.innerHTML = `
+            <strong>Talep İletilemedi:</strong><br />
+            ${result.error || 'İşlem sırasında bir hata oluştu. Lütfen bilgilerinizi kontrol edip tekrar deneyin veya telefonla arayınız.'}
+          `;
+          statusBox.style.display = 'block';
+        }
+      } catch (err) {
+        statusBox.className = 'rez-status-box error';
+        statusBox.innerHTML = `
+          <strong>Bağlantı Hatası:</strong><br />
+          Sunucuya ulaşılamadı. Lütfen internet bağlantınızı kontrol ediniz veya telefon ile rezervasyon yaptırınız.
+        `;
+        statusBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        if (btnText) btnText.style.display = 'inline-block';
+        if (btnSpinner) btnSpinner.style.display = 'none';
+      }
+    });
+  }
+
+  setupReservationForm();
+  document.addEventListener('astro:after-swap', setupReservationForm);
+</script>

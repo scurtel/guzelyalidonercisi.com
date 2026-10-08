@@ -102,12 +102,22 @@ const breadcrumbs = [
             </div>
           </div>
 
-          <div class="directions-button-wrap">
+          <div class="contact-actions-wrap">
+            <a href="/rezervasyon" class="btn btn-primary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>Rezervasyon Talebi Oluştur</span>
+            </a>
+
             <a 
               href={businessConfig.contact.googleMapsUrl} 
               target="_blank" 
               rel="noopener noreferrer" 
-              class="btn btn-primary btn-lg"
+              class="btn btn-secondary btn-lg"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
@@ -251,8 +261,11 @@ const breadcrumbs = [
     margin-top: 4px;
   }
 
-  .directions-button-wrap {
-    margin-top: 8px;
+  .contact-actions-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
   }
 
   /* Harita Kapsayıcısı */

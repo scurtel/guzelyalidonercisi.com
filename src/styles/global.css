@@ -354,7 +354,7 @@ p {
 /* Responsive Sticky Mobile Action Bar */
 @media (max-width: 768px) {
   body {
-    padding-bottom: 74px; /* Mobil eylem çubuğu boşluğu */
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); /* Mobil eylem çubuğu boşluğu */
   }
 }
 
