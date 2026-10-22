@@ -23,27 +23,62 @@ function test(title, fn) {
 
 // 1. Dosya Varlıkları
 test('1.1 dist/menu/index.html dosyası mevcut', () => {
-  assert.ok(fs.existsSync(path.join(DIST_DIR, 'menu/index.html')));
+  assert.ok(fs.existsSync(path.join(DIST_DIR, 'menu/index.html')), 'dist/menu/index.html bulunamadı');
 });
 
 test('1.2 dist/rezervasyon/index.html dosyası mevcut', () => {
-  assert.ok(fs.existsSync(path.join(DIST_DIR, 'rezervasyon/index.html')));
+  assert.ok(fs.existsSync(path.join(DIST_DIR, 'rezervasyon/index.html')), 'dist/rezervasyon/index.html bulunamadı');
 });
 
 test('1.3 dist/api/reservation.php backend işleyicisi mevcut', () => {
-  assert.ok(fs.existsSync(path.join(DIST_DIR, 'api/reservation.php')));
+  assert.ok(fs.existsSync(path.join(DIST_DIR, 'api/reservation.php')), 'dist/api/reservation.php bulunamadı');
 });
 
 // 2. Menü Sayfası Doğrulamaları
-test('2.1 Menü sayfası başlık ve ürün kategorileri korunmuş', () => {
+test('2.1 Menü sayfası title, H1 ve meta description doğru', () => {
   const html = fs.readFileSync(path.join(DIST_DIR, 'menu/index.html'), 'utf-8');
-  assert.ok(html.includes('Lezzet Menümüz'), 'H1 Lezzet Menümüz bulunmalı');
-  assert.ok(html.includes('id="cat-donerler"'), 'Kategori id="cat-donerler" bulunmalı');
-  assert.ok(html.includes('id="cat-durumler"'), 'Kategori id="cat-durumler" bulunmalı');
-  assert.ok(html.includes('id="cat-iskender"'), 'Kategori id="cat-iskender" bulunmalı');
+  assert.ok(html.includes('Adana Güzelyalı Dönercisi Menü ve Güncel Fiyatlar'), 'Title "Adana Güzelyalı Dönercisi Menü ve Güncel Fiyatlar" içermeli');
+  assert.ok(html.includes('Güzelyalı Dönercisi Menü'), 'H1 "Güzelyalı Dönercisi Menü" içermeli');
+  assert.ok(html.includes('Güzelyalı Dönercisi et döner, tavuk döner, dürüm, pilav üstü döner ve içecek seçeneklerini güncel fiyatlarıyla inceleyin'), 'Meta description doğru olmalı');
 });
 
-test('2.2 Menü sayfasında Masanızı Ayırtın rezervasyon CTA bağlantısı mevcut', () => {
+test('2.2 Menü sayfası 5 kategoriyi içeriyor', () => {
+  const html = fs.readFileSync(path.join(DIST_DIR, 'menu/index.html'), 'utf-8');
+  assert.ok(html.includes('id="cat-tavuk-doner"'), 'Kategori id="cat-tavuk-doner" bulunmalı');
+  assert.ok(html.includes('id="cat-et-doner"'), 'Kategori id="cat-et-doner" bulunmalı');
+  assert.ok(html.includes('id="cat-pilav-ustu"'), 'Kategori id="cat-pilav-ustu" bulunmalı');
+  assert.ok(html.includes('id="cat-yan-urunler"'), 'Kategori id="cat-yan-urunler" bulunmalı');
+  assert.ok(html.includes('id="cat-icecekler"'), 'Kategori id="cat-icecekler" bulunmalı');
+});
+
+test('2.3 Menüde 16 ürünün tamamı ve doğru fiyatlar yer alıyor', () => {
+  const html = fs.readFileSync(path.join(DIST_DIR, 'menu/index.html'), 'utf-8');
+  const expectedItems = [
+    { name: 'Tavuk Döner Servis', price: '270' },
+    { name: 'Tavuk Döner Dürüm', price: '220' },
+    { name: 'Tavuk Döner Sütlü Ekmeğe', price: '220' },
+    { name: 'Et Döner Servis', price: '420' },
+    { name: 'Et Döner Dürüm', price: '400' },
+    { name: 'Et Döner Sütlü Dürüm Ekmeğe', price: '400' },
+    { name: 'Pilav Üstü Tavuk', price: '370' },
+    { name: 'Pilav Üstü Et', price: '500' },
+    { name: 'Patates Kızartması', price: '90' },
+    { name: 'Ayran', price: '60' },
+    { name: 'Coca-Cola', price: '80' },
+    { name: 'Sprite', price: '80' },
+    { name: 'Fanta', price: '80' },
+    { name: 'Fuse Tea Şeftali', price: '80' },
+    { name: 'Fuse Tea Limon', price: '80' },
+    { name: 'Su', price: '20' },
+  ];
+
+  for (const item of expectedItems) {
+    assert.ok(html.includes(item.name), `Menüde ürün bulunamadı: ${item.name}`);
+    assert.ok(html.includes(item.price), `Menüde fiyat bulunamadı: ${item.price} TL (${item.name})`);
+  }
+});
+
+test('2.4 Menü sayfasında Masanızı Ayırtın rezervasyon CTA bağlantısı mevcut', () => {
   const html = fs.readFileSync(path.join(DIST_DIR, 'menu/index.html'), 'utf-8');
   assert.ok(html.includes('href="/rezervasyon"'), 'Rezervasyon linki bulunmalı');
   assert.ok(html.includes('Masanızı Ayırtın'), 'Masanızı Ayırtın metni bulunmalı');
@@ -52,17 +87,23 @@ test('2.2 Menü sayfasında Masanızı Ayırtın rezervasyon CTA bağlantısı m
 // 3. Rezervasyon Sayfası Doğrulamaları
 test('3.1 Rezervasyon sayfası title, H1 ve meta description doğru', () => {
   const html = fs.readFileSync(path.join(DIST_DIR, 'rezervasyon/index.html'), 'utf-8');
-  assert.ok(html.includes('Masa Rezervasyonu | Güzelyalı Dönercisi Adana'), 'Title doğru olmalı');
-  assert.ok(html.includes('Güzelyalı Dönercisi Masa Rezervasyonu'), 'H1 doğru olmalı');
-  assert.ok(html.includes('sevdiklerinizle keyifli bir sofra için masa rezervasyonu talebinizi kolayca iletin'), 'Açıklama doğru olmalı');
-  assert.ok(html.includes('rel="canonical" href="https://guzelyalidonercisi.com/rezervasyon"'), 'Canonical URL doğru olmalı');
+  assert.ok(html.includes('Masa Rezervasyonu | Adana Güzelyalı Dönercisi'), 'Title "Masa Rezervasyonu | Adana Güzelyalı Dönercisi" olmalı');
+  assert.ok(html.includes('Masa Rezervasyonu'), 'H1 "Masa Rezervasyonu" olmalı');
+  assert.ok(html.includes('Adana Güzelyalı Dönercisi için kolayca masa rezervasyon talebi oluşturun'), 'Açıklama doğru olmalı');
+  assert.ok(html.includes('rel="canonical" href="https://guzelyalidonercisi.com/rezervasyon/"'), 'Canonical URL doğru olmalı');
 });
 
-test('3.2 Rezervasyon sayfası varsayılan açılış yakında mesajını gösteriyor', () => {
+test('3.2 Rezervasyon formu tüm gerekli alanları ve onay metnini içeriyor', () => {
   const html = fs.readFileSync(path.join(DIST_DIR, 'rezervasyon/index.html'), 'utf-8');
-  assert.ok(html.includes('Rezervasyonlarımız Çok Yakında Açılıyor'), 'Açılış yakında başlığı bulunmalı');
-  assert.ok(html.includes('Açılış Hazırlığı Sürüyor'), 'Açılış hazırlığı rozeti bulunmalı');
-  assert.ok(html.includes('Şeffaflık İlkesi'), 'Şeffaflık açıklaması bulunmalı');
+  assert.ok(html.includes('id="rezFullName"'), 'Ad Soyad alanı bulunmalı');
+  assert.ok(html.includes('id="rezPhone"'), 'Telefon alanı bulunmalı');
+  assert.ok(html.includes('id="rezDate"'), 'Tarih alanı bulunmalı');
+  assert.ok(html.includes('id="rezTime"'), 'Saat alanı bulunmalı');
+  assert.ok(html.includes('id="rezGuests"'), 'Kişi sayısı alanı bulunmalı');
+  assert.ok(html.includes('id="rezNotes"'), 'Not alanı bulunmalı');
+  assert.ok(html.includes('id="rezKvkk"'), 'KVKK onay kutusu bulunmalı');
+  assert.ok(html.includes('Rezervasyon Talebi Gönder'), 'Rezervasyon Talebi Gönder butonu bulunmalı');
+  assert.ok(html.includes('Rezervasyonunuz işletme tarafından onaylandıktan sonra kesinleşecektir'), 'Kesinleşme bilgilendirmesi bulunmalı');
 });
 
 // 4. Header & Navigasyon Doğrulamaları
@@ -88,7 +129,7 @@ test('5.1 Hero alanında Menüyü İncele ve Masa Rezervasyonu butonları mevcut
 
 test('5.2 Ana sayfadaki imza lezzet ürün kartları menü sayfasına bağlı', () => {
   const html = fs.readFileSync(path.join(DIST_DIR, 'index.html'), 'utf-8');
-  assert.ok(html.includes('href="/menu#cat-donerler"'), 'Dönerler kategorisine bağlantı olmalı');
+  assert.ok(html.includes('href="/menu#cat-et-doner"'), 'Et döner kategorisine bağlantı olmalı');
   assert.ok(html.includes('Menüde İncele'), 'Menüde İncele bağlantısı olmalı');
 });
 

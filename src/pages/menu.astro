@@ -4,8 +4,8 @@ import NeYesemAssistant from '@/components/NeYesemAssistant.astro';
 import { menuCategories, menuItems } from '@/data/menu';
 import { businessConfig } from '@/config/business';
 
-const pageTitle = `Lezzet Menüsü | ${businessConfig.brandName} Adana`;
-const pageDescription = 'Güzelyalı Dönercisi menüsü: Odun ve köz ateşinde pişen hakiki yaprak et döner, lavaş dürümler, Bursa usulü İskender, taze mezeler ve Antep tatlıları.';
+const pageTitle = 'Adana Güzelyalı Dönercisi Menü ve Güncel Fiyatlar';
+const pageDescription = 'Güzelyalı Dönercisi et döner, tavuk döner, dürüm, pilav üstü döner ve içecek seçeneklerini güncel fiyatlarıyla inceleyin.';
 
 const breadcrumbs = [
   { name: 'Menü', url: '/menu' }
@@ -14,7 +14,7 @@ const breadcrumbs = [
 const menuStructuredData = {
   '@context': 'https://schema.org',
   '@type': 'Menu',
-  name: `${businessConfig.brandName} Lezzet Menüsü`,
+  name: 'Güzelyalı Dönercisi Menü',
   description: pageDescription,
   inLanguage: 'tr-TR',
   hasMenuSection: menuCategories.map((cat) => ({
@@ -28,6 +28,12 @@ const menuStructuredData = {
         name: dish.name,
         description: dish.description,
         image: `${businessConfig.site.url}${dish.image}`,
+        offers: {
+          '@type': 'Offer',
+          price: dish.price,
+          priceCurrency: 'TRY',
+          availability: 'https://schema.org/InStock'
+        }
       }))
   }))
 };
@@ -43,18 +49,26 @@ const menuStructuredData = {
   <div class="menu-page-header">
     <div class="container">
       <span class="badge badge-brass">Güzelyalı Dönercisi Sofrası</span>
-      <h1>Lezzet Menümüz</h1>
+      <h1 class="menu-h1">Güzelyalı Dönercisi Menü</h1>
       <div class="divider-brass"></div>
       <p class="menu-intro">
-        Tüm dönerlerimiz günlük olarak dinlendirilmiş yerli dana ve kuzu etinden taze şişe dizilerek hazırlanır.
+        Tüm dönerlerimiz günlük dinlendirilmiş yerli etlerden, köz ateşinin ağır ağır işleyen ustalığıyla taze hazırlanır. Tüm fiyatlarımız Türk Lirası (TL) cinsindendir.
       </p>
 
-      <!-- Fiyat ve Açılış Bilgilendirme Notu -->
-      <div class="menu-notice-card">
-        <div class="notice-icon">📢</div>
-        <div class="notice-content">
-          <strong>Açılış Hazırlığı & Fiyatlandırma Bilgisi:</strong>
-          <span>Kapılarımızı açtığımız gün tüm gramaj seçenekleri ve güncel fiyatlarımız bu sayfada eksiksiz olarak yayınlanacaktır. Ürünlerimizin tamamı birinci sınıf malzemelerle hazırlanmaktadır.</span>
+      <div class="menu-quick-stats">
+        <div class="quick-stat-item">
+          <span class="stat-icon">🥩</span>
+          <span class="stat-text"><strong>%100 Yerli Besi</strong> & Günlük Hazırlık</span>
+        </div>
+        <div class="quick-stat-divider"></div>
+        <div class="quick-stat-item">
+          <span class="stat-icon">🔥</span>
+          <span class="stat-text"><strong>Odun & Köz Ateşi</strong> Lezzeti</span>
+        </div>
+        <div class="quick-stat-divider"></div>
+        <div class="quick-stat-item">
+          <span class="stat-icon">✨</span>
+          <span class="stat-text"><strong>16 Seçkin Ürün</strong> & Şeffaf Fiyat</span>
         </div>
       </div>
     </div>
@@ -65,13 +79,17 @@ const menuStructuredData = {
     <div class="container">
       <div class="category-tabs" role="tablist" aria-label="Menü Kategorileri">
         <button class="cat-tab active" data-category="all" role="tab" aria-selected="true">
-          Tüm Menü
+          Tüm Menü (16)
         </button>
-        {menuCategories.map((cat) => (
-          <button class="cat-tab" data-category={cat.key} role="tab" aria-selected="false">
-            {cat.title}
-          </button>
-        ))}
+        {menuCategories.map((cat) => {
+          const count = menuItems.filter((i) => i.category === cat.key).length;
+          return (
+            <button class="cat-tab" data-category={cat.key} role="tab" aria-selected="false">
+              <span>{cat.title}</span>
+              <span class="cat-count">({count})</span>
+            </button>
+          );
+        })}
       </div>
     </div>
   </div>
@@ -86,7 +104,10 @@ const menuStructuredData = {
         return (
           <section class="menu-category-group" id={`cat-${cat.key}`} data-category-group={cat.key}>
             <div class="cat-group-header">
-              <h2>{cat.title}</h2>
+              <div class="cat-title-wrap">
+                <h2>{cat.title}</h2>
+                <span class="cat-badge-pill">{catItems.length} Çeşit</span>
+              </div>
               <p>{cat.description}</p>
             </div>
 
@@ -96,7 +117,7 @@ const menuStructuredData = {
                   <div class="item-media">
                     <img 
                       src={item.image} 
-                      alt={item.name} 
+                      alt={`${item.name} - Güzelyalı Dönercisi Adana`} 
                       width="800" 
                       height="600" 
                       loading="lazy" 
@@ -111,7 +132,10 @@ const menuStructuredData = {
                   <div class="item-body">
                     <div class="item-top">
                       <h3 class="item-name">{item.name}</h3>
-                      <span class="item-price-tag">{item.priceNote}</span>
+                      <div class="item-price-badge">
+                        <span class="price-val">{item.price}</span>
+                        <span class="price-curr">TL</span>
+                      </div>
                     </div>
 
                     <p class="item-desc">{item.description}</p>
@@ -150,17 +174,30 @@ const menuStructuredData = {
           <h2>Güzelyalı Dönercisi Sofrasında Masanızı Ayırtın</h2>
           <div class="divider-brass"></div>
           <p>
-            Hakiki yaprak et dönerimizi, köz ateşinde nar gibi kızaran lezzetlerimizi ve fırından yeni çıkmış sıcacık pidelerimizi yerinde deneyimlemek için masanızı önceden ayırtabilirsiniz.
+            Özel terbiye yaprak et ve tavuk dönerlerimizi, taze açma lavaşlarımızı ve zengin ikramlarımızı yerinde deneyimlemek için hemen masa rezervasyon talebinizi iletin.
           </p>
-          <a href="/rezervasyon" class="btn btn-primary btn-lg menu-rez-btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            <span>Masanızı Ayırtın</span>
-          </a>
+          <div class="rez-cta-buttons">
+            <a href="/rezervasyon" class="btn btn-primary btn-lg menu-rez-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>Masa Rezervasyonu Yap</span>
+            </a>
+            <a 
+              href={businessConfig.contact.googleMapsUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn btn-secondary btn-lg"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+              </svg>
+              <span>Yol Tarifi Al</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -178,47 +215,48 @@ const menuStructuredData = {
     border-bottom: 1px solid var(--color-border);
   }
 
-  .menu-page-header h1 {
+  .menu-h1 {
     font-size: clamp(2.2rem, 4vw, 3.2rem);
     margin: 12px 0 6px;
+    color: var(--color-ink);
+    font-family: var(--font-display);
   }
 
   .menu-intro {
     font-size: 1.1rem;
     color: var(--color-muted);
-    max-width: 640px;
-    margin: 0 auto 28px;
+    max-width: 680px;
+    margin: 0 auto 24px;
+    line-height: 1.65;
   }
 
-  .menu-notice-card {
+  .menu-quick-stats {
     display: flex;
     align-items: center;
-    gap: 16px;
-    background-color: #FEF8ED;
-    border: 1px solid #F5DCAD;
-    border-radius: var(--radius-md);
-    padding: 16px 24px;
-    max-width: 760px;
-    margin: 0 auto;
-    text-align: left;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 16px;
+    padding-top: 18px;
+    border-top: 1px solid var(--color-border-subtle);
   }
 
-  .notice-icon {
-    font-size: 1.8rem;
-    flex-shrink: 0;
-  }
-
-  .notice-content strong {
-    display: block;
-    color: #9A5A05;
-    font-size: 0.95rem;
-    margin-bottom: 2px;
-  }
-
-  .notice-content span {
+  .quick-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 0.88rem;
-    color: #6E4912;
-    line-height: 1.5;
+    color: var(--color-ink-soft);
+  }
+
+  .stat-icon {
+    font-size: 1.2rem;
+  }
+
+  .quick-stat-divider {
+    width: 1px;
+    height: 20px;
+    background-color: var(--color-border);
   }
 
   /* Kategori Navigasyon Çubuğu */
@@ -226,11 +264,11 @@ const menuStructuredData = {
     position: sticky;
     top: var(--header-height);
     z-index: 100;
-    background-color: rgba(250, 247, 242, 0.96);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background-color: rgba(250, 247, 242, 0.98);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--color-border);
-    padding: 12px 0;
+    padding: 14px 0;
   }
 
   .category-tabs {
@@ -252,6 +290,9 @@ const menuStructuredData = {
   }
 
   .cat-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 10px 20px;
     border-radius: var(--radius-pill);
     background-color: var(--color-surface);
@@ -264,6 +305,11 @@ const menuStructuredData = {
     transition: all var(--transition-fast);
   }
 
+  .cat-tab .cat-count {
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+
   .cat-tab:hover {
     background-color: var(--color-surface-subtle);
     border-color: var(--color-burgundy);
@@ -274,7 +320,7 @@ const menuStructuredData = {
     background-color: var(--color-burgundy);
     border-color: var(--color-burgundy);
     color: #FFFFFF;
-    box-shadow: 0 2px 8px rgba(122, 26, 34, 0.25);
+    box-shadow: 0 4px 12px rgba(122, 26, 34, 0.28);
   }
 
   /* Menü İçeriği */
@@ -285,18 +331,37 @@ const menuStructuredData = {
 
   .menu-category-group {
     margin-bottom: 64px;
+    scroll-margin-top: calc(var(--header-height) + 80px);
   }
 
   .cat-group-header {
-    margin-bottom: 32px;
+    margin-bottom: 28px;
     padding-bottom: 16px;
     border-bottom: 2px solid var(--color-border);
+  }
+
+  .cat-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
   }
 
   .cat-group-header h2 {
     font-size: 1.85rem;
     color: var(--color-ink);
-    margin-bottom: 6px;
+    font-family: var(--font-display);
+    margin: 0;
+  }
+
+  .cat-badge-pill {
+    background-color: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    color: var(--color-ink-soft);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: var(--radius-pill);
   }
 
   .cat-group-header p {
@@ -316,6 +381,14 @@ const menuStructuredData = {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .menu-item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(184, 139, 74, 0.4);
   }
 
   .item-media {
@@ -333,7 +406,7 @@ const menuStructuredData = {
   }
 
   .menu-item-card:hover .item-img {
-    transform: scale(1.05);
+    transform: scale(1.04);
   }
 
   .signature-pill {
@@ -347,6 +420,7 @@ const menuStructuredData = {
     text-transform: uppercase;
     padding: 4px 8px;
     border-radius: var(--radius-sm);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
   }
 
   .item-body {
@@ -365,25 +439,42 @@ const menuStructuredData = {
   }
 
   .item-name {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--color-ink);
     line-height: 1.3;
+    font-family: var(--font-sans);
   }
 
-  .item-price-tag {
-    font-size: 0.74rem;
-    font-weight: 600;
-    color: var(--color-muted);
-    background-color: var(--color-surface-subtle);
-    padding: 3px 8px;
+  /* Belirgin Fiyat Rozeti */
+  .item-price-badge {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+    background: linear-gradient(135deg, #1C1614 0%, #2F2624 100%);
+    color: #FFFFFF;
+    padding: 6px 12px;
     border-radius: var(--radius-sm);
+    border-left: 3px solid #B88B4A;
+    box-shadow: 0 2px 6px rgba(28, 22, 20, 0.15);
     white-space: nowrap;
-    border: 1px solid var(--color-border);
+  }
+
+  .price-val {
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #FAF7F2;
+  }
+
+  .price-curr {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #B88B4A;
   }
 
   .item-desc {
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     color: var(--color-ink-soft);
     line-height: 1.55;
     flex: 1;
@@ -404,7 +495,7 @@ const menuStructuredData = {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    padding-top: 8px;
+    padding-top: 10px;
     border-top: 1px dashed var(--color-border-subtle);
   }
 
@@ -415,6 +506,7 @@ const menuStructuredData = {
     background-color: var(--color-surface-subtle);
     padding: 3px 8px;
     border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
   }
 
   .tag-badge {
@@ -442,8 +534,21 @@ const menuStructuredData = {
       height: 200px;
     }
 
+    .quick-stat-divider {
+      display: none;
+    }
+
+    .menu-quick-stats {
+      flex-direction: column;
+      gap: 10px;
+    }
+
     .menu-reservation-cta {
       padding: 32px 20px;
+    }
+
+    .rez-cta-buttons {
+      flex-direction: column;
     }
   }
 
@@ -467,6 +572,7 @@ const menuStructuredData = {
     font-size: clamp(1.8rem, 3.2vw, 2.4rem);
     color: var(--color-ink);
     margin: 12px 0 8px;
+    font-family: var(--font-display);
   }
 
   .menu-rez-content p {
@@ -474,6 +580,14 @@ const menuStructuredData = {
     color: var(--color-muted);
     line-height: 1.65;
     margin-bottom: 28px;
+  }
+
+  .rez-cta-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
   }
 
   .menu-rez-btn {
@@ -488,9 +602,26 @@ const menuStructuredData = {
     const tabs = document.querySelectorAll('.cat-tab');
     const groups = document.querySelectorAll('.menu-category-group');
 
-    function applyCategory(cat: string, scroll = false) {
+    // Kategori eşleştirme haritası (Eski linkler ve harici yönlendirmeler için)
+    const categoryAliases: Record<string, string> = {
+      'donerler': 'et-doner',
+      'durumler': 'et-doner',
+      'porsiyonlar': 'et-doner',
+      'iskender': 'et-doner',
+      'yan-urunler': 'yan-urunler',
+      'icecekler': 'icecekler',
+      'tatlilar': 'all',
+      'tavuk-doner': 'tavuk-doner',
+      'et-doner': 'et-doner',
+      'pilav-ustu': 'pilav-ustu'
+    };
+
+    function applyCategory(rawCat: string, scroll = false) {
+      const cat = categoryAliases[rawCat] || rawCat;
+
       tabs.forEach((t) => {
-        const isMatch = t.getAttribute('data-category') === cat;
+        const tabCat = t.getAttribute('data-category');
+        const isMatch = tabCat === cat;
         t.classList.toggle('active', isMatch);
         t.setAttribute('aria-selected', isMatch ? 'true' : 'false');
       });
@@ -527,13 +658,10 @@ const menuStructuredData = {
       });
     });
 
-    // Hash link kontrolü (örn: /menu#cat-durumler)
+    // Hash kontrolü (örn: /menu#cat-et-doner veya /menu#cat-iskender)
     if (window.location.hash) {
       const hashCat = window.location.hash.replace(/^#cat-/, '');
-      const hasMatch = Array.from(tabs).some((t) => t.getAttribute('data-category') === hashCat);
-      if (hasMatch) {
-        applyCategory(hashCat, true);
-      }
+      applyCategory(hashCat, true);
     }
   }
 

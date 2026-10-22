@@ -65,6 +65,7 @@ export interface BusinessConfig {
     allowedHours: string[];
     minGuests: number;
     maxGuests: number;
+    whatsappNumber?: string;
   };
 
   // Web Sitesi & SEO Parametreleri
@@ -135,12 +136,10 @@ export const businessConfig: BusinessConfig = {
   },
 
   reservations: {
-    // Açılış hazırlığı sürecinde olduğundan varsayılan false'tur.
-    // .env dosyasından RESERVATIONS_ENABLED=true verilerek veya buradan true yapılarak anında aktif edilebilir.
-    enabled: typeof process !== 'undefined' && process.env?.RESERVATIONS_ENABLED === 'true',
-    statusNotice: 'Restoranımız çok yakında kapılarını açmaya hazırlanıyor. Açılışımızla birlikte online masa rezervasyonu sistemimiz bu sayfada aktif olacaktır.',
-    openingSoonMessage: 'Rezervasyonlarımız Çok Yakında Açılıyor',
-    openingSoonDetail: 'Güzelyalı Dönercisi olarak Adana Çukurova’da en lezzetli yaprak döner deneyimini sizlere sunmak için son hazırlıklarımızı yapıyoruz. Açılış tarihimiz ve masa rezervasyonu kabulümüz çok yakında başlayacaktır.',
+    enabled: true,
+    statusNotice: 'Masa rezervasyonu talebinizi aşağıdaki form üzerinden doldurabilir, WhatsApp hattımız üzerinden kolayca iletebilirsiniz.',
+    openingSoonMessage: 'Rezervasyon Talebi Oluşturun',
+    openingSoonDetail: 'Güzelyalı Dönercisi olarak Adana Çukurova’da en lezzetli yaprak döner deneyimini sizlere sunuyoruz.',
     allowedHours: [
       '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
       '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
@@ -149,6 +148,7 @@ export const businessConfig: BusinessConfig = {
     ],
     minGuests: 1,
     maxGuests: 12,
+    whatsappNumber: process.env.RESERVATION_WHATSAPP_NUMBER || '',
   },
 
   site: {

@@ -40,7 +40,7 @@ const featuredDishes = menuItems.filter((item) => item.featured).slice(0, 4);
                   {dish.name}
                 </a>
               </h3>
-              <span class="dish-price-note">{dish.priceNote}</span>
+              <span class="dish-price-note">{dish.priceFormatted || (dish.price ? `${dish.price} TL` : dish.priceNote)}</span>
             </div>
 
             <p class="dish-desc">{dish.description}</p>

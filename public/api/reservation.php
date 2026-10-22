@@ -76,7 +76,7 @@ function loadEnvVariables(): array {
 }
 
 $envVars = loadEnvVariables();
-$reservationsEnabledEnv = $envVars['RESERVATIONS_ENABLED'] ?? getenv('RESERVATIONS_ENABLED') ?: 'false';
+$reservationsEnabledEnv = $envVars['RESERVATIONS_ENABLED'] ?? getenv('RESERVATIONS_ENABLED') ?: 'true';
 $isReservationsEnabled = filter_var($reservationsEnabledEnv, FILTER_VALIDATE_BOOLEAN);
 
 $notificationEmail = $envVars['RESERVATION_NOTIFICATION_EMAIL'] 

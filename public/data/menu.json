@@ -1,121 +1,162 @@
 [
   {
-    "id": "yaprak-et-doner-porsiyon",
-    "name": "Güzelyalı Yaprak Et Döner (Porsiyon)",
-    "description": "Özel marinasyonla dinlendirilmiş dana antrikot ve kuzu eti, köz ateşinde nar gibi kızaran ince yaprak kesim.",
-    "category": "donerler",
-    "tags": ["İmza Lezzet", "Odun / Köz Ateşi", "Özel Marine"],
-    "portion": "120 gr / 150 gr seçenekleri"
+    "id": "tavuk-doner-servis",
+    "name": "Tavuk Döner Servis",
+    "price": 270,
+    "priceFormatted": "270 TL",
+    "description": "Özel baharat ve marinasyonla dinlendirilmiş tavuk döner; tırnak pide, közlenmiş biber, domates ve sumaklı soğan salatası eşliğinde servis edilir.",
+    "category": "tavuk-doner",
+    "portion": "Porsiyon Servis",
+    "tags": ["Özel Terbiye", "Köz Ateşi", "Garnitürlü"]
   },
   {
-    "id": "pilav-ustu-et-doner",
-    "name": "Tereyağlı Pilav Üstü Et Döner",
-    "description": "Geleneksel tereyağlı baldo pirinç pilavı üzerinde servis edilen sulu yaprak et döner, köz biber ve domatesle.",
-    "category": "donerler",
-    "tags": ["Geleneksel", "Tereyağlı Pilav"],
-    "portion": "Tek Porsiyon"
+    "id": "tavuk-doner-durum",
+    "name": "Tavuk Döner Dürüm",
+    "price": 220,
+    "priceFormatted": "220 TL",
+    "description": "Sıcak açma lavaş içerisine sarılı bol tavuk döner, közlenmiş biber ve isteğe göre hafif maydanozlu soğan.",
+    "category": "tavuk-doner",
+    "portion": "Lavaş Dürüm",
+    "tags": ["Taze Lavaş", "Doyurucu"]
   },
   {
-    "id": "ekmek-arasi-et-doner",
-    "name": "Özel Tombik / Somun Et Döner",
-    "description": "Fırından yeni çıkmış çıtır susamlı tombik ekmek içerisine bol yaprak döner, domates ve ince kıyım soğan.",
-    "category": "donerler",
-    "tags": ["Hızlı & Doyurucu", "Çıtır Tombik"],
-    "portion": "100 gr / 130 gr"
+    "id": "tavuk-doner-sutlu-ekmege",
+    "name": "Tavuk Döner Sütlü Ekmeğe",
+    "price": 220,
+    "priceFormatted": "220 TL",
+    "description": "Özel fırınlanmış yumuşak sütlü ekmek arasına bol tavuk döner, domates dilimleri ve özel sos dokunuşu.",
+    "category": "tavuk-doner",
+    "portion": "Sütlü Ekmek",
+    "tags": ["Sütlü Ekmek", "Özel Lezzet"]
   },
   {
-    "id": "guzelyali-ozel-durum",
-    "name": "Güzelyalı Özel Lavaş Döner Dürüm",
-    "description": "İncecik taze açma lavaş içerisine bol yaprak et döner, közlenmiş Adana biberi, domates ve hafif maydanozlu sumak.",
-    "category": "durumler",
-    "tags": ["Şefin Önerisi", "Sıcak Lavaş"],
-    "portion": "Dürüm"
+    "id": "et-doner-servis",
+    "name": "Et Döner Servis",
+    "price": 420,
+    "priceFormatted": "420 TL",
+    "description": "Özel marinasyonla dinlendirilmiş dana ve kuzu etinden incecik yaprak kesim; tırnak pide, köz biber, domates ve taze yeşilliklerle.",
+    "category": "et-doner",
+    "portion": "Porsiyon Servis",
+    "tags": ["İmza Lezzet", "Yaprak Et", "Odun / Köz Ateşi"]
   },
   {
-    "id": "kasarli-durum-doner",
-    "name": "Eritme Kaşarlı Döner Dürüm",
-    "description": "Sıcak lavaş arasında dönerin sıcaklığıyla eriyen hakiki Trakya kaşarı ve taze baharat dokunuşu.",
-    "category": "durumler",
-    "tags": ["Eritme Kaşar", "Sıcak Servis"],
-    "portion": "Dürüm"
+    "id": "et-doner-durum",
+    "name": "Et Döner Dürüm",
+    "price": 400,
+    "priceFormatted": "400 TL",
+    "description": "İncecik taze lavaş içerisine bol yaprak et döner, közlenmiş Adana biberi, domates ve sumaklı ince soğan.",
+    "category": "et-doner",
+    "portion": "Lavaş Dürüm",
+    "tags": ["Şefin İmzası", "Sıcak Lavaş"]
   },
   {
-    "id": "guzelyali-karisik-tabak",
-    "name": "Güzelyalı Usta Tabağı (1.5 Porsiyon)",
-    "description": "Döner tutkunları için 180 gr bol yaprak döner, tereyağlı pide parçaları, köz sebzeler, patates tava ve süzme yoğurt.",
-    "category": "porsiyonlar",
-    "tags": ["Doyurucu", "Garnitürlü"],
-    "portion": "1.5 Porsiyon (180 gr)"
+    "id": "et-doner-sutlu-durum-ekmege",
+    "name": "Et Döner Sütlü Dürüm Ekmeğe",
+    "price": 400,
+    "priceFormatted": "400 TL",
+    "description": "Fırından taze çıkan özel sütlü dürüm ekmeği içerisine bol yaprak et döner, köz sebzeler ve hafif baharat çeşnisi.",
+    "category": "et-doner",
+    "portion": "Sütlü Dürüm Ekmek",
+    "tags": ["Sütlü Ekmek", "Yaprak Döner"]
   },
   {
-    "id": "sadrazam-porsiyon",
-    "name": "Köz Biberli Porsiyon Döner",
-    "description": "Tırnak pide üzerinde servis edilen yaprak döner, közlenmiş acı ve tatlı biberler, sumaklı taze soğan salatası.",
-    "category": "porsiyonlar",
-    "tags": ["Acı Severler", "Köz Biber"],
-    "portion": "1 Porsiyon (130 gr)"
+    "id": "pilav-ustu-tavuk",
+    "name": "Pilav Üstü Tavuk",
+    "price": 370,
+    "priceFormatted": "370 TL",
+    "description": "Geleneksel tereyağlı tane tane baldo pirinç pilavı üzerinde lezzetli tavuk döner, közlenmiş biber ve domates eşliğinde.",
+    "category": "pilav-ustu",
+    "portion": "Tek Porsiyon",
+    "tags": ["Tereyağlı Pilav", "Doyurucu"]
   },
   {
-    "id": "guzelyali-ozel-iskender",
-    "name": "Güzelyalı Hakiki Bursa Usulü İskender",
-    "description": "Fırında hafif kıtırlaştırılmış tırnaklı pide, ince yaprak et döner, kıvamında pişmiş domates sosu, manda yoğurdu ve masada kızgın dökülen saf tereyağı.",
-    "category": "iskender",
-    "tags": ["Masada Tereyağı", "Manda Yoğurdu", "Geleneksel Sos"],
-    "portion": "1 Porsiyon / 1.5 Porsiyon"
+    "id": "pilav-ustu-et",
+    "name": "Pilav Üstü Et",
+    "price": 500,
+    "priceFormatted": "500 TL",
+    "description": "Geleneksel tereyağlı baldo pirinç pilavı üzerinde sulu ve yumuşacık yaprak et döner, közlenmiş biber ve domatesle.",
+    "category": "pilav-ustu",
+    "portion": "Tek Porsiyon",
+    "tags": ["Geleneksel", "Tereyağlı Pilav", "İmza"]
   },
   {
-    "id": "adana-bostana-salata",
-    "name": "Çukurova Bostana Salatası",
-    "description": "Zırhla ince kıyılmış domates, salatalık, taze nane, maydanoz, ceviz parçaları ve hakiki nar ekşisi.",
+    "id": "patates-kizartmasi",
+    "name": "Patates Kızartması",
+    "price": 90,
+    "priceFormatted": "90 TL",
+    "description": "Altın sarısı çıtır çıtır kızarmış patates dilimleri, özel baharat harmanıyla sıcacık masanıza sunulur.",
     "category": "yan-urunler",
-    "tags": ["Taze & Ferahlatıcı", "Zırh Kıyım"]
+    "portion": "Porsiyon",
+    "tags": ["Çıtır", "Sıcak Servis"]
   },
   {
-    "id": "baharatli-patates-tava",
-    "name": "Özel Baharatlı Çıtır Patates",
-    "description": "Taze patateslerden günlük doğranan, özel baharat harmanıyla tatlandırılmış çıtır patates tava.",
-    "category": "yan-urunler",
-    "tags": ["Çıtır", "Taze"]
-  },
-  {
-    "id": "sumakli-sogan-piyazi",
-    "name": "Geleneksel Sumaklı Soğan Salatası",
-    "description": "İnce hilal doğranmış soğan, Güneydoğu sumağı, ince kıyım maydanoz ve sızma zeytinyağı.",
-    "category": "yan-urunler",
-    "tags": ["Masa İkramı"]
-  },
-  {
-    "id": "antep-fistikli-katmer",
-    "name": "Çıtır Antep Fıstıklı Katmer",
-    "description": "İncecik açılmış çıtır hamur içerisinde bol Antep fıstığı ve manda kaymağı, fırından sıcacık.",
-    "category": "tatlilar",
-    "tags": ["Fırından Sıcak", "Antep Fıstığı"]
-  },
-  {
-    "id": "firinda-sutlac",
-    "name": "Geleneksel Fırın Sütlaç",
-    "description": "Tam yağlı köy sütü ile ağır ateşte kaynatılıp fırında nar gibi kızartılan enfes sütlaç.",
-    "category": "tatlilar",
-    "tags": ["Hafif Lezzet", "Köy Sütü"]
-  },
-  {
-    "id": "yayik-ayrani",
-    "name": "Hakiki Açık Yayık Ayranı",
-    "description": "Bol köpüklü, bakır maşrapa ile sunulan geleneksel soğuk yayık ayranı.",
+    "id": "ayran",
+    "name": "Ayran",
+    "price": 60,
+    "priceFormatted": "60 TL",
+    "description": "Geleneksel lezzetinde, bol köpüklü ve ferahlatıcı soğuk ayran.",
     "category": "icecekler",
-    "tags": ["Bakır Maşrapa", "Bol Köpüklü"]
+    "portion": "Soğuk İçecek",
+    "tags": ["Bol Köpüklü", "Geleneksel"]
   },
   {
-    "id": "adana-ozel-salgam",
-    "name": "Adana Usulü Acılı / Acısız Şalgam",
-    "description": "Geleneksel mayalanma yöntemiyle hazırlanan, mor havuç taneli hakiki Çukurova şalgamı.",
+    "id": "coca-cola",
+    "name": "Coca-Cola",
+    "price": 80,
+    "priceFormatted": "80 TL",
+    "description": "Buz gibi soğuk servis edilen kutu Coca-Cola.",
     "category": "icecekler",
-    "tags": ["Geleneksel", "Adana"]
+    "portion": "Kutu 330 ml",
+    "tags": ["Soğuk İçecek"]
   },
   {
-    "id": "mesrubatlar",
-    "name": "Soğuk Meşrubatlar & Maden Suyu",
-    "description": "Kola, fanta, gazoz ve doğal kaynak mineralli maden suyu çeşitleri.",
-    "category": "icecekler"
+    "id": "sprite",
+    "name": "Sprite",
+    "price": 80,
+    "priceFormatted": "80 TL",
+    "description": "Limon ferahlığı veren buz gibi kutu gazoz.",
+    "category": "icecekler",
+    "portion": "Kutu 330 ml",
+    "tags": ["Soğuk İçecek"]
+  },
+  {
+    "id": "fanta",
+    "name": "Fanta",
+    "price": 80,
+    "priceFormatted": "80 TL",
+    "description": "Portakal lezzetiyle ferahlatıcı soğuk kutu meşrubat.",
+    "category": "icecekler",
+    "portion": "Kutu 330 ml",
+    "tags": ["Soğuk İçecek"]
+  },
+  {
+    "id": "fuse-tea-seftali",
+    "name": "Fuse Tea Şeftali",
+    "price": 80,
+    "priceFormatted": "80 TL",
+    "description": "Doğal çay demi ve şeftali aromalı serinletici soğuk çay.",
+    "category": "icecekler",
+    "portion": "Kutu 330 ml",
+    "tags": ["Soğuk İçecek"]
+  },
+  {
+    "id": "fuse-tea-limon",
+    "name": "Fuse Tea Limon",
+    "price": 80,
+    "priceFormatted": "80 TL",
+    "description": "Ferahlatıcı limon aromalı soğuk buzlu çay.",
+    "category": "icecekler",
+    "portion": "Kutu 330 ml",
+    "tags": ["Soğuk İçecek"]
+  },
+  {
+    "id": "su",
+    "name": "Su",
+    "price": 20,
+    "priceFormatted": "20 TL",
+    "description": "Doğal kaynak mineralli içme suyu.",
+    "category": "icecekler",
+    "portion": "Pet Şişe 500 ml",
+    "tags": ["Doğal Kaynak"]
   }
 ]

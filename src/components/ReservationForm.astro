@@ -3,31 +3,35 @@
  * Güzelyalı Dönercisi - Masa Rezervasyonu Formu Bileşeni
  * 
  * Özellikler:
- * - 1-12 Kişi seçimi
- * - Geçmiş tarih seçimi engelli (Bugünden başlayan takvim)
- * - Müsait saat aralıkları
- * - KVKK Aydınlatma Metni entegrasyonu (Modal pencereli)
+ * - Ad Soyad, Telefon, Tarih, Saat, Kişi Sayısı, Not alanları
+ * - Geçmiş tarih seçimi engelli (Bugünden başlayan takvim, maks 60 gün)
+ * - Doğrulanmış servis çalışma saatleri (12:00 - 21:30)
+ * - Kolay kişi sayısı hızlı seçimi (1-12 kişi)
+ * - Telefon format doğrulama
+ * - KVKK Aydınlatma Metni & modal onayı
+ * - WhatsApp Rezervasyon Talebi aktarımı
+ * - "Rezervasyonunuz işletme tarafından onaylandıktan sonra kesinleşecektir." teyit bildirimi
  * - Honeypot spam koruması
- * - Asenkron /api/reservation.php iletişimi
  */
 import { businessConfig } from '@/config/business';
 
 const allowedHours = businessConfig.reservations.allowedHours;
 const minGuests = businessConfig.reservations.minGuests;
 const maxGuests = businessConfig.reservations.maxGuests;
+const whatsappNumber = businessConfig.reservations.whatsappNumber || businessConfig.contact.phoneRaw || '';
 ---
 
 <div class="reservation-form-wrapper card">
   <div class="form-header">
-    <div class="badge badge-brass">Masa Rezervasyon Talebi</div>
-    <h2 class="form-title">Sofranızı Önceden Ayırtın</h2>
+    <div class="badge badge-brass">Masa Rezervasyonu</div>
+    <h2 class="form-title">Masa Rezervasyon Talebi</h2>
     <p class="form-subtitle">
-      Aşağıdaki formu doldurarak rezervasyon talebinizi iletebilirsiniz. Ekibimiz müsaitliği kontrol edip telefon numaranız üzerinden sizinle iletişime geçerek rezervasyonunuzu teyit edecektir.
+      Aşağıdaki formu doldurarak rezervasyon talebinizi kolayca iletebilirsiniz. Talebiniz işletmemize aktarılacak olup, <strong>rezervasyonunuz işletme tarafından onaylandıktan sonra kesinleşecektir.</strong>
     </p>
   </div>
 
-  <form id="reservationForm" class="reservation-form" novalidate>
-    <!-- Honeypot Bot Kapanı (İnsanlar görmez) -->
+  <form id="reservationForm" class="reservation-form" novalidate data-whatsapp={whatsappNumber}>
+    <!-- Honeypot Bot Kapanı (Görünmez) -->
     <div style="display:none !important;" aria-hidden="true">
       <label for="rez_website_url">Web Sitesi</label>
       <input type="text" id="rez_website_url" name="website_url" tabindex="-1" autocomplete="off" />
@@ -37,7 +41,7 @@ const maxGuests = businessConfig.reservations.maxGuests;
     <div class="form-grid-2">
       <div class="form-group">
         <label for="rezFullName" class="form-label">
-          Adınız ve Soyadınız <span class="required" aria-hidden="true">*</span>
+          Ad Soyad <span class="required" aria-hidden="true">*</span>
         </label>
         <input 
           type="text" 
@@ -55,7 +59,7 @@ const maxGuests = businessConfig.reservations.maxGuests;
 
       <div class="form-group">
         <label for="rezPhone" class="form-label">
-          Telefon Numaranız <span class="required" aria-hidden="true">*</span>
+          Telefon Numarası <span class="required" aria-hidden="true">*</span>
         </label>
         <input 
           type="tel" 
@@ -70,38 +74,34 @@ const maxGuests = businessConfig.reservations.maxGuests;
       </div>
     </div>
 
-    <!-- 2. Satır: E-posta & Kişi Sayısı -->
-    <div class="form-grid-2">
-      <div class="form-group">
-        <label for="rezEmail" class="form-label">
-          E-posta Adresiniz <span class="optional">(İsteğe Bağlı)</span>
-        </label>
-        <input 
-          type="email" 
-          id="rezEmail" 
-          name="email" 
-          class="form-input" 
-          placeholder="Örn: adiniz@ornek.com" 
-          autocomplete="email"
-        />
-        <span class="field-error" id="rezEmailError" role="alert"></span>
+    <!-- 2. Satır: Kişi Sayısı (Hızlı Butonlar + Seçim) -->
+    <div class="form-group">
+      <label class="form-label" for="rezGuests">
+        Kişi Sayısı <span class="required" aria-hidden="true">*</span>
+      </label>
+      <div class="guest-selector-pills" role="radiogroup" aria-label="Kişi Sayısı Seçin">
+        {[1, 2, 3, 4, 5, 6, 8, 10, 12].map((num) => (
+          <button 
+            type="button" 
+            class:list={['guest-pill', { active: num === 2 }]} 
+            data-guests={num}
+            aria-pressed={num === 2 ? 'true' : 'false'}
+          >
+            {num} {num === 1 ? 'Kişi' : 'Kişi'}
+          </button>
+        ))}
       </div>
-
-      <div class="form-group">
-        <label for="rezGuests" class="form-label">
-          Kişi Sayısı <span class="required" aria-hidden="true">*</span>
-        </label>
-        <select id="rezGuests" name="guests" class="form-select" required>
-          <option value="" disabled selected>Kişi sayısı seçiniz</option>
-          {Array.from({ length: maxGuests - minGuests + 1 }, (_, i) => i + minGuests).map((num) => (
-            <option value={num}>{num} Kişi {num === 1 ? '(Tek Kişi)' : num >= 8 ? '(Geniş Masa)' : ''}</option>
-          ))}
-        </select>
-        <span class="field-error" id="rezGuestsError" role="alert"></span>
-      </div>
+      <select id="rezGuests" name="guests" class="form-select guest-fallback-select" required>
+        {Array.from({ length: maxGuests - minGuests + 1 }, (_, i) => i + minGuests).map((num) => (
+          <option value={num} selected={num === 2}>
+            {num} Kişi {num === 1 ? '(Tek Kişi)' : num >= 8 ? '(Geniş Masa)' : ''}
+          </option>
+        ))}
+      </select>
+      <span class="field-error" id="rezGuestsError" role="alert"></span>
     </div>
 
-    <!-- 3. Satır: Tarih & Saat Seçimi -->
+    <!-- 3. Satır: Tarih & Saat -->
     <div class="form-grid-2">
       <div class="form-group">
         <label for="rezDate" class="form-label">
@@ -131,17 +131,18 @@ const maxGuests = businessConfig.reservations.maxGuests;
       </div>
     </div>
 
-    <!-- 4. Satır: Özel Not / Talep -->
+    <!-- 4. Satır: Özel İstekler / Not -->
     <div class="form-group">
       <label for="rezNotes" class="form-label">
-        Özel Not / İstek <span class="optional">(İsteğe Bağlı)</span>
+        Özel İstekler / Not <span class="optional">(İsteğe Bağlı)</span>
       </label>
       <textarea 
         id="rezNotes" 
         name="notes" 
         class="form-textarea" 
-        placeholder="Bebek sandalyesi talebi, masa konumu tercihi veya alerjen hassasiyeti gibi notlarınızı iletebilirsiniz..."
+        placeholder="Bebek sandalyesi, masa konumu tercihi veya alerjen hassasiyeti gibi notlarınızı iletebilirsiniz..."
         maxlength="500"
+        rows="3"
       ></textarea>
       <div class="textarea-footer">
         <span class="field-error" id="rezNotesError" role="alert"></span>
@@ -149,12 +150,12 @@ const maxGuests = businessConfig.reservations.maxGuests;
       </div>
     </div>
 
-    <!-- 5. Satır: KVKK Aydınlatma Metni Onayı -->
+    <!-- 5. Satır: KVKK Aydınlatması ve Onay -->
     <div class="form-group-checkbox">
       <label class="checkbox-label" for="rezKvkk">
         <input type="checkbox" id="rezKvkk" name="kvkkConsent" required />
         <span class="checkbox-text">
-          <button type="button" id="openKvkkModal" class="btn-text-link">Kişisel verilerin işlenmesine ilişkin aydınlatma metnini</button> okudum ve rezervasyon talebimin işlenmesini kabul ediyorum. <span class="required" aria-hidden="true">*</span>
+          <button type="button" id="openKvkkModal" class="btn-text-link">KVKK Aydınlatma Metni'ni</button> okudum, kişisel verilerimin rezervasyon talebinin işlenmesi amacıyla kullanılmasını onaylıyorum. <span class="required" aria-hidden="true">*</span>
         </span>
       </label>
       <span class="field-error" id="rezKvkkError" role="alert"></span>
@@ -163,7 +164,12 @@ const maxGuests = businessConfig.reservations.maxGuests;
     <!-- Gönder Butonu -->
     <div class="form-actions">
       <button type="submit" id="rezSubmitBtn" class="btn btn-primary btn-lg btn-submit">
-        <span class="btn-text">Rezervasyon Talebini İlet</span>
+        <span class="btn-text-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+          </svg>
+          <span class="btn-text">Rezervasyon Talebi Gönder</span>
+        </span>
         <span class="btn-spinner" style="display: none;" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="animate-spin">
             <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
@@ -171,6 +177,14 @@ const maxGuests = businessConfig.reservations.maxGuests;
           </svg>
         </span>
       </button>
+
+      <div class="form-guarantee-note">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span>Rezervasyonunuz işletme tarafından onaylandıktan sonra kesinleşecektir.</span>
+      </div>
     </div>
 
     <!-- Durum Mesaj Kutusu -->
@@ -178,7 +192,7 @@ const maxGuests = businessConfig.reservations.maxGuests;
   </form>
 </div>
 
-<!-- KVKK Bilgilendirme Modalı -->
+<!-- KVKK Aydınlatma Metni Modalı -->
 <div id="kvkkModal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="kvkkModalTitle">
   <div class="modal-dialog">
     <div class="modal-header">
@@ -192,23 +206,23 @@ const maxGuests = businessConfig.reservations.maxGuests;
     </div>
     <div class="modal-body">
       <p>
-        <strong>Güzelyalı Dönercisi</strong> olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca, veri sorumlusu sıfatıyla rezervasyon formumuz aracılığıyla paylaştığınız kişisel verilerinizin güvenliğine azami önem veriyoruz.
+        <strong>Güzelyalı Dönercisi</strong> olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca, veri sorumlusu sıfatıyla rezervasyon formumuz aracılığıyla paylaştığınız kişisel verilerinizin gizliliğine ve güvenliğine azami özen gösteriyoruz.
       </p>
-      <h4>1. İşlenen Kişisel Verileriniz ve İşlenme Amacı</h4>
+      <h4>1. İşlenen Kişisel Veriler ve Amaç</h4>
       <p>
-        Bu form kapsamında tarafınızdan temin edilen <em>Ad Soyad, Telefon Numarası, E-posta Adresi (isteğe bağlı), Rezervasyon Tarihi ve Saati, Kişi Sayısı ve Rezervasyon Notu</em> verileriniz; masa rezervasyonunuzun organize edilmesi, müsaitlik kontrolü yapılması, rezervasyon teyidi için sizinle iletişime geçilmesi ve restoran hizmetlerimizin yürütülmesi amaçlarıyla sınırlı olarak işlenmektedir.
+        Form üzerinden ilettiğiniz <em>Ad Soyad, Telefon Numarası, Rezervasyon Tarihi, Saati, Kişi Sayısı ve Özel Not</em> verileriniz; masa rezervasyonunuzun düzenlenmesi, müsaitlik doğrulaması yapılması ve rezervasyon teyidi için sizinle iletişime geçilmesi amaçlarıyla sınırlı olarak işlenmektedir.
       </p>
-      <h4>2. Verilerin Aktarımı ve Saklanması</h4>
+      <h4>2. Veri Güvenliği ve Aktarım</h4>
       <p>
-        Kişisel verileriniz üçüncü şahıslara ticari veya pazarlama amacıyla kesinlikle satılmaz ya da aktarılmaz. Yalnızca yasal zorunluluk hallerinde yetkili kamu kurum ve kuruluşları ile paylaşılabilir. Verileriniz, yasal saklama süreleri boyunca güvenli sunucu altyapımızda muhafaza edilir.
+        Verileriniz üçüncü şahıslara ticari amaçla satılmaz, devredilmez veya paylaşılmaz. Yalnızca yasal zorunluluk halinde ilgili resmi makamlarla paylaşılabilir.
       </p>
-      <h4>3. Haklarınız</h4>
+      <h4>3. Başvuru Hakkı</h4>
       <p>
-        KVKK'nın 11. maddesi uyarınca dilediğiniz zaman işletmemize başvurarak verilerinizin işlenip işlenmediğini öğrenme, yanlış işlenmişse düzeltilmesini talep etme veya silinmesini isteme hakkına sahipsiniz. Başvurularınızı <a href={`mailto:${businessConfig.contact.email}`}>{businessConfig.contact.email}</a> adresine iletebilirsiniz.
+        KVKK'nın 11. maddesi kapsamındaki haklarınıza ilişkin taleplerinizi <a href={`mailto:${businessConfig.contact.email}`}>{businessConfig.contact.email}</a> kurumsal e-posta adresimiz üzerinden iletebilirsiniz.
       </p>
     </div>
     <div class="modal-footer">
-      <button type="button" id="confirmKvkkModal" class="btn btn-primary btn-sm">Anladım</button>
+      <button type="button" id="confirmKvkkModal" class="btn btn-primary btn-sm">Okudum ve Anladım</button>
     </div>
   </div>
 </div>
@@ -218,68 +232,69 @@ const maxGuests = businessConfig.reservations.maxGuests;
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: 44px;
+    padding: 40px;
     box-shadow: var(--shadow-md);
   }
 
   .form-header {
-    margin-bottom: 32px;
+    margin-bottom: 28px;
   }
 
   .form-title {
-    font-size: clamp(1.8rem, 3.2vw, 2.3rem);
+    font-size: clamp(1.8rem, 3.2vw, 2.2rem);
     color: var(--color-ink);
     margin: 12px 0 8px;
+    font-family: var(--font-display);
   }
 
   .form-subtitle {
-    font-size: 0.98rem;
+    font-size: 0.96rem;
     color: var(--color-muted);
     line-height: 1.6;
-    max-width: 720px;
+    max-width: 680px;
+  }
+
+  .form-subtitle strong {
+    color: var(--color-burgundy);
   }
 
   .reservation-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
   }
 
   .form-grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 22px;
+    gap: 20px;
   }
 
   .form-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
   }
 
   .form-label {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 600;
     color: var(--color-ink);
-    display: flex;
-    align-items: center;
-    gap: 4px;
   }
 
   .required {
-    color: var(--color-burgundy);
-    font-weight: 700;
+    color: #DC2626;
   }
 
   .optional {
-    color: var(--color-muted-light);
+    font-size: 0.78rem;
     font-weight: 400;
-    font-size: 0.82rem;
+    color: var(--color-muted);
   }
 
   .form-input, .form-select, .form-textarea {
     width: 100%;
-    padding: 13px 16px;
+    padding: 12px 14px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     background-color: var(--color-surface);
@@ -289,45 +304,76 @@ const maxGuests = businessConfig.reservations.maxGuests;
   }
 
   .form-input:focus, .form-select:focus, .form-textarea:focus {
-    border-color: var(--color-burgundy);
-    box-shadow: 0 0 0 3px var(--color-burgundy-light);
     outline: none;
+    border-color: var(--color-burgundy);
+    box-shadow: 0 0 0 3px rgba(122, 26, 34, 0.12);
   }
 
   .form-input.is-invalid, .form-select.is-invalid, .form-textarea.is-invalid {
-    border-color: #E53E3E;
-    background-color: #FFF5F5;
+    border-color: #DC2626;
+    background-color: #FEF2F2;
   }
 
-  .form-textarea {
-    min-height: 110px;
-    resize: vertical;
+  .field-error {
+    font-size: 0.78rem;
+    color: #DC2626;
+    min-height: 16px;
+  }
+
+  /* Kişi Sayısı Hızlı Seçim Butonları */
+  .guest-selector-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .guest-pill {
+    padding: 8px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .guest-pill:hover {
+    border-color: var(--color-burgundy);
+    color: var(--color-burgundy);
+    background-color: var(--color-surface-subtle);
+  }
+
+  .guest-pill.active {
+    background-color: var(--color-burgundy);
+    border-color: var(--color-burgundy);
+    color: #FFFFFF;
+    box-shadow: 0 2px 6px rgba(122, 26, 34, 0.25);
+  }
+
+  .guest-fallback-select {
+    display: none;
   }
 
   .textarea-footer {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-top: 4px;
+    justify-content: space-between;
   }
 
   .char-count {
-    font-size: 0.78rem;
-    color: var(--color-muted-light);
-    margin-left: auto;
-  }
-
-  .field-error {
-    font-size: 0.8rem;
-    color: #C53030;
-    min-height: 18px;
-    display: block;
-    line-height: 1.4;
+    font-size: 0.76rem;
+    color: var(--color-muted);
   }
 
   /* KVKK Checkbox */
   .form-group-checkbox {
-    margin: 8px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 4px;
   }
 
   .checkbox-label {
@@ -339,15 +385,14 @@ const maxGuests = businessConfig.reservations.maxGuests;
 
   .checkbox-label input[type="checkbox"] {
     margin-top: 4px;
-    width: 18px;
-    height: 18px;
+    width: 17px;
+    height: 17px;
     accent-color: var(--color-burgundy);
     cursor: pointer;
-    flex-shrink: 0;
   }
 
   .checkbox-text {
-    font-size: 0.88rem;
+    font-size: 0.84rem;
     color: var(--color-ink-soft);
     line-height: 1.5;
   }
@@ -355,51 +400,96 @@ const maxGuests = businessConfig.reservations.maxGuests;
   .btn-text-link {
     background: none;
     border: none;
-    color: var(--color-burgundy);
-    text-decoration: underline;
-    font-weight: 600;
-    cursor: pointer;
     padding: 0;
+    color: var(--color-burgundy);
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
     font-size: inherit;
-    font-family: inherit;
   }
 
-  .btn-text-link:hover {
-    color: var(--color-burgundy-hover);
-  }
-
+  /* Form Aksiyonları */
   .form-actions {
-    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 8px;
   }
 
   .btn-submit {
-    min-width: 240px;
-    padding: 16px 36px;
-    font-size: 1.05rem;
-    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    cursor: pointer;
   }
 
-  /* Durum Kutuları */
+  .btn-text-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .form-guarantee-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--color-muted);
+    text-align: center;
+  }
+
+  .form-guarantee-note svg {
+    color: #B88B4A;
+    flex-shrink: 0;
+  }
+
+  /* Durum Bildirim Kutusu */
   .rez-status-box {
-    padding: 18px 24px;
+    padding: 18px 20px;
     border-radius: var(--radius-md);
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-top: 16px;
+    font-size: 0.92rem;
+    line-height: 1.55;
     animation: fadeIn 0.3s ease;
   }
 
   .rez-status-box.success {
-    background-color: #EDFDF2;
-    border: 1px solid #9AE6B4;
-    color: #1C4532;
-    box-shadow: 0 4px 14px rgba(72, 187, 120, 0.12);
+    background-color: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    color: #166534;
   }
 
   .rez-status-box.error {
-    background-color: #FFF5F5;
-    border: 1px solid #FEB2B2;
-    color: #742A2A;
+    background-color: #FEF2F2;
+    border: 1px solid #FECACA;
+    color: #991B1B;
+  }
+
+  .rez-status-box strong {
+    font-size: 1rem;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .rez-copy-box {
+    margin-top: 14px;
+    padding: 12px;
+    background: #FFFFFF;
+    border: 1px dashed #86EFAC;
+    border-radius: var(--radius-sm);
+    font-family: monospace;
+    font-size: 0.84rem;
+    white-space: pre-line;
+    color: #1F2937;
+  }
+
+  .rez-action-row {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
   }
 
   .animate-spin {
@@ -446,12 +536,6 @@ const maxGuests = businessConfig.reservations.maxGuests;
     flex-direction: column;
     box-shadow: 0 20px 40px rgba(0,0,0,0.25);
     border: 1px solid var(--color-border);
-    animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  @keyframes modalIn {
-    from { opacity: 0; transform: scale(0.96); }
-    to { opacity: 1; transform: scale(1); }
   }
 
   .modal-header {
@@ -466,6 +550,8 @@ const maxGuests = businessConfig.reservations.maxGuests;
     font-size: 1.15rem;
     color: var(--color-ink);
     margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 700;
   }
 
   .modal-close {
@@ -475,11 +561,6 @@ const maxGuests = businessConfig.reservations.maxGuests;
     cursor: pointer;
     padding: 4px;
     border-radius: 4px;
-    transition: color var(--transition-fast);
-  }
-
-  .modal-close:hover {
-    color: var(--color-ink);
   }
 
   .modal-body {
@@ -506,22 +587,16 @@ const maxGuests = businessConfig.reservations.maxGuests;
     display: flex;
     justify-content: flex-end;
     background-color: var(--color-bg);
-    border-bottom-left-radius: var(--radius-lg);
-    border-bottom-right-radius: var(--radius-lg);
   }
 
   @media (max-width: 768px) {
     .reservation-form-wrapper {
-      padding: 28px 20px;
+      padding: 28px 18px;
     }
 
     .form-grid-2 {
       grid-template-columns: 1fr;
       gap: 16px;
-    }
-
-    .btn-submit {
-      width: 100%;
     }
   }
 </style>
@@ -536,21 +611,37 @@ const maxGuests = businessConfig.reservations.maxGuests;
     const dateInput = document.getElementById('rezDate') as HTMLInputElement | null;
     const notesInput = document.getElementById('rezNotes') as HTMLTextAreaElement | null;
     const notesCount = document.getElementById('rezNotesCount') as HTMLElement | null;
+    const guestsSelect = document.getElementById('rezGuests') as HTMLSelectElement | null;
+    const guestPills = document.querySelectorAll('.guest-pill');
 
-    // Minimum tarihi bugün olarak ayarla (Geçmiş tarih seçilemez)
+    // Kişi sayısı pill butonları yönetimi
+    guestPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        guestPills.forEach((p) => {
+          p.classList.remove('active');
+          p.setAttribute('aria-pressed', 'false');
+        });
+        pill.classList.add('active');
+        pill.setAttribute('aria-pressed', 'true');
+        const num = pill.getAttribute('data-guests');
+        if (guestsSelect && num) {
+          guestsSelect.value = num;
+        }
+      });
+    });
+
+    // Tarih kısıtlamaları (Geçmiş tarih seçilemez, bugünden itibaren)
     if (dateInput) {
       const today = new Date();
       const pad = (n: number) => String(n).padStart(2, '0');
       const todayStr = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
       dateInput.min = todayStr;
       
-      // En fazla 60 gün sonrasına izin ver
       const maxDate = new Date();
       maxDate.setDate(maxDate.getDate() + 60);
       const maxDateStr = `${maxDate.getFullYear()}-${pad(maxDate.getMonth() + 1)}-${pad(maxDate.getDate())}`;
       dateInput.max = maxDateStr;
 
-      // Varsayılan olarak bugünü seç
       if (!dateInput.value) {
         dateInput.value = todayStr;
       }
@@ -559,8 +650,7 @@ const maxGuests = businessConfig.reservations.maxGuests;
     // Karakter Sayacı
     if (notesInput && notesCount) {
       notesInput.addEventListener('input', () => {
-        const len = notesInput.value.length;
-        notesCount.textContent = `${len} / 500`;
+        notesCount.textContent = `${notesInput.value.length} / 500`;
       });
     }
 
@@ -591,15 +681,11 @@ const maxGuests = businessConfig.reservations.maxGuests;
     closeModalBtn?.addEventListener('click', closeModal);
     confirmModalBtn?.addEventListener('click', () => {
       closeModal();
-      if (kvkkCheckbox) {
-        kvkkCheckbox.checked = true;
-      }
+      if (kvkkCheckbox) kvkkCheckbox.checked = true;
     });
 
     kvkkModal?.addEventListener('click', (e) => {
-      if (e.target === kvkkModal) {
-        closeModal();
-      }
+      if (e.target === kvkkModal) closeModal();
     });
 
     document.addEventListener('keydown', (e) => {
@@ -608,22 +694,17 @@ const maxGuests = businessConfig.reservations.maxGuests;
       }
     });
 
-    // Form Gönderimi
+    // Form Gönderimi & WhatsApp Entegrasyonu
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!submitBtn || !statusBox) return;
 
-      // Hata alanlarını temizle
-      const errorElements = form.querySelectorAll('.field-error');
-      errorElements.forEach((el) => { (el as HTMLElement).textContent = ''; });
-      const invalidInputs = form.querySelectorAll('.is-invalid');
-      invalidInputs.forEach((el) => el.classList.remove('is-invalid'));
+      // Hata alanlarını sıfırla
+      form.querySelectorAll('.field-error').forEach((el) => { (el as HTMLElement).textContent = ''; });
+      form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
 
-      // Değerleri oku
       const fullNameInput = document.getElementById('rezFullName') as HTMLInputElement;
       const phoneInput = document.getElementById('rezPhone') as HTMLInputElement;
-      const emailInput = document.getElementById('rezEmail') as HTMLInputElement;
-      const guestsInput = document.getElementById('rezGuests') as HTMLSelectElement;
       const dateValInput = document.getElementById('rezDate') as HTMLInputElement;
       const timeInput = document.getElementById('rezTime') as HTMLSelectElement;
       const notesValInput = document.getElementById('rezNotes') as HTMLTextAreaElement;
@@ -632,7 +713,7 @@ const maxGuests = businessConfig.reservations.maxGuests;
 
       let isValid = true;
 
-      // Ad Soyad
+      // 1. Ad Soyad kontrolü
       const fullName = fullNameInput.value.trim();
       if (!fullName || fullName.length < 2) {
         isValid = false;
@@ -641,9 +722,9 @@ const maxGuests = businessConfig.reservations.maxGuests;
         if (err) err.textContent = 'Lütfen adınızı ve soyadınızı belirtin (en az 2 karakter).';
       }
 
-      // Telefon
+      // 2. Telefon kontrolü
       const phone = phoneInput.value.trim();
-      const phoneDigits = phone.replace(/[^\d+]/g, '');
+      const phoneDigits = phone.replace(/[^\d]/g, '');
       if (!phone || phoneDigits.length < 10) {
         isValid = false;
         phoneInput.classList.add('is-invalid');
@@ -651,34 +732,34 @@ const maxGuests = businessConfig.reservations.maxGuests;
         if (err) err.textContent = 'Lütfen geçerli bir telefon numarası girin (örn: 0532 123 45 67).';
       }
 
-      // E-posta (İsteğe bağlı, girilmişse format kontrolü)
-      const email = emailInput.value.trim();
-      if (email && (!email.includes('@') || !email.includes('.'))) {
-        isValid = false;
-        emailInput.classList.add('is-invalid');
-        const err = document.getElementById('rezEmailError');
-        if (err) err.textContent = 'Lütfen geçerli bir e-posta adresi yazın veya alanı boş bırakın.';
-      }
-
-      // Kişi sayısı
-      const guests = parseInt(guestsInput.value, 10);
+      // 3. Kişi Sayısı
+      const guests = parseInt(guestsSelect ? guestsSelect.value : '2', 10);
       if (!guests || guests < 1 || guests > 12) {
         isValid = false;
-        guestsInput.classList.add('is-invalid');
         const err = document.getElementById('rezGuestsError');
-        if (err) err.textContent = 'Lütfen kişi sayısı seçiniz.';
+        if (err) err.textContent = 'Lütfen geçerli bir kişi sayısı seçin.';
       }
 
-      // Tarih
+      // 4. Tarih kontrolü
       const date = dateValInput.value;
       if (!date) {
         isValid = false;
         dateValInput.classList.add('is-invalid');
         const err = document.getElementById('rezDateError');
         if (err) err.textContent = 'Lütfen rezervasyon tarihi seçiniz.';
+      } else {
+        const selected = new Date(date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (selected < today) {
+          isValid = false;
+          dateValInput.classList.add('is-invalid');
+          const err = document.getElementById('rezDateError');
+          if (err) err.textContent = 'Geçmiş tarihlere rezervasyon yapılamaz.';
+        }
       }
 
-      // Saat
+      // 5. Saat kontrolü
       const time = timeInput.value;
       if (!time) {
         isValid = false;
@@ -687,79 +768,114 @@ const maxGuests = businessConfig.reservations.maxGuests;
         if (err) err.textContent = 'Lütfen rezervasyon saati seçiniz.';
       }
 
-      // KVKK
+      // 6. KVKK Onayı
       if (!kvkkInput.checked) {
         isValid = false;
         const err = document.getElementById('rezKvkkError');
-        if (err) err.textContent = 'Rezervasyon yapabilmek için aydınlatma metnini onaylamanız gerekmektedir.';
+        if (err) err.textContent = 'Rezervasyon talebi için aydınlatma metnini onaylamanız gerekmektedir.';
       }
 
-      if (!isValid) {
-        return;
-      }
+      if (!isValid) return;
 
-      // Gönderim Animasyonu
+      // Gönderim Durumu
       submitBtn.disabled = true;
-      const btnText = submitBtn.querySelector('.btn-text') as HTMLElement | null;
+      const btnTextWrap = submitBtn.querySelector('.btn-text-wrap') as HTMLElement | null;
       const btnSpinner = submitBtn.querySelector('.btn-spinner') as HTMLElement | null;
-      if (btnText) btnText.style.display = 'none';
+      if (btnTextWrap) btnTextWrap.style.display = 'none';
       if (btnSpinner) btnSpinner.style.display = 'inline-block';
       statusBox.style.display = 'none';
 
+      // WhatsApp Mesaj Şablonu (Kullanıcı tarafından istenen kesin format)
+      const formattedNote = notesValInput.value.trim() || 'Yok';
+      const whatsappMessage = 
+`Güzelyalı Dönercisi Rezervasyon Talebi
+
+Ad Soyad: ${fullName}
+Telefon: ${phone}
+Tarih: ${date}
+Saat: ${time}
+Kişi Sayısı: ${guests}
+Not: ${formattedNote}`;
+
+      // WhatsApp Hedef Numarası
+      const configuredWhatsapp = form.getAttribute('data-whatsapp') || '';
+      const cleanWaNumber = configuredWhatsapp.replace(/[^\d]/g, '');
+
       try {
-        const response = await fetch('/api/reservation.php', {
+        // Backend'e de kayıt/bildirim olarak gönder
+        await fetch('/api/reservation.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             fullName,
             phone,
-            email,
             date,
             time,
             guests,
-            notes: notesValInput.value.trim(),
+            notes: formattedNote,
             kvkkConsent: kvkkInput.checked,
             website_url: honeypotInput ? honeypotInput.value : ''
           })
-        });
+        }).catch(() => null);
 
-        const result = await response.json().catch(() => ({
-          success: false,
-          error: 'Sunucudan geçersiz yanıt alındı.'
-        }));
+        // Başarı mesajı ve durum ekranı
+        statusBox.className = 'rez-status-box success';
 
-        if (response.ok && result.success) {
-          statusBox.className = 'rez-status-box success';
+        if (cleanWaNumber) {
+          // Doğrulanmış WhatsApp numarası varsa doğrudan yönlendir
+          const waUrl = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(whatsappMessage)}`;
           statusBox.innerHTML = `
-            <strong>Talebiniz Alındı!</strong><br />
-            ${result.message || 'Rezervasyon talebiniz alınmıştır. Rezervasyonunuz, işletmemiz tarafından onaylandığında kesinleşecektir.'}
+            <strong>Rezervasyon Talebiniz Hazırlandı!</strong>
+            <p>WhatsApp uygulaması açılıyor. Lütfen açılan ekranda "Gönder" butonuna basarak talebinizi işletmemize iletiniz.</p>
+            <p style="margin-top: 8px;"><em>Rezervasyonunuz işletme tarafından onaylandıktan sonra kesinleşecektir.</em></p>
+            <div class="rez-action-row">
+              <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                WhatsApp'ta Aç
+              </a>
+            </div>
           `;
-          statusBox.style.display = 'block';
-          form.reset();
-          if (dateInput) {
-            const today = new Date();
-            const pad = (n: number) => String(n).padStart(2, '0');
-            dateInput.value = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
-          }
-          if (notesCount) notesCount.textContent = '0 / 500';
+          window.open(waUrl, '_blank');
         } else {
-          statusBox.className = 'rez-status-box error';
+          // Açılış öncesi henüz resmi WhatsApp numarası atanmamışsa
           statusBox.innerHTML = `
-            <strong>Talep İletilemedi:</strong><br />
-            ${result.error || 'İşlem sırasında bir hata oluştu. Lütfen bilgilerinizi kontrol edip tekrar deneyin veya telefonla arayınız.'}
+            <strong>Rezervasyon Talebiniz Alındı!</strong>
+            <p>Talebiniz işletmemize başarıyla iletilmiştir. <strong>Rezervasyonunuz işletme tarafından onaylandıktan sonra kesinleşecektir.</strong></p>
+            <p style="margin-top: 6px; font-size: 0.88rem; color: #166534;">
+              Ekibimiz telefon numaranız (${phone}) üzerinden sizinle iletişime geçerek masa müsaitliğinizi teyit edecektir.
+            </p>
+            <div class="rez-copy-box">${whatsappMessage}</div>
           `;
-          statusBox.style.display = 'block';
         }
+
+        statusBox.style.display = 'block';
+        form.reset();
+
+        // Varsayılan tarihi tekrar bugüne al
+        if (dateInput) {
+          const today = new Date();
+          const pad = (n: number) => String(n).padStart(2, '0');
+          dateInput.value = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+        }
+        if (notesCount) notesCount.textContent = '0 / 500';
+
+        // Kişi sayısı butonunu 2'ye resetle
+        guestPills.forEach((p) => {
+          const isTwo = p.getAttribute('data-guests') === '2';
+          p.classList.toggle('active', isTwo);
+          p.setAttribute('aria-pressed', isTwo ? 'true' : 'false');
+        });
+        if (guestsSelect) guestsSelect.value = '2';
+
       } catch (err) {
         statusBox.className = 'rez-status-box error';
         statusBox.innerHTML = `
           <strong>Bağlantı Hatası:</strong><br />
-          Sunucuya ulaşılamadı. Lütfen internet bağlantınızı kontrol ediniz veya telefon ile rezervasyon yaptırınız.
+          Talep iletilirken bir sorun oluştu. Lütfen bilgilerinizi kontrol edip tekrar deneyiniz.
         `;
         statusBox.style.display = 'block';
       } finally {
         submitBtn.disabled = false;
-        if (btnText) btnText.style.display = 'inline-block';
+        if (btnTextWrap) btnTextWrap.style.display = 'inline-flex';
         if (btnSpinner) btnSpinner.style.display = 'none';
       }
     });
