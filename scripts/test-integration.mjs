@@ -103,6 +103,7 @@ test('3.2 Rezervasyon formu tüm gerekli alanları ve onay metnini içeriyor', (
   assert.ok(html.includes('id="rezNotes"'), 'Not alanı bulunmalı');
   assert.ok(html.includes('id="rezKvkk"'), 'KVKK onay kutusu bulunmalı');
   assert.ok(html.includes('Rezervasyon Talebi Gönder'), 'Rezervasyon Talebi Gönder butonu bulunmalı');
+  assert.ok(html.includes('data-whatsapp="905403036637"'), 'WhatsApp numarası data-whatsapp="905403036637" tanımlı olmalı');
   assert.ok(html.includes('Rezervasyonunuz işletme tarafından onaylandıktan sonra kesinleşecektir'), 'Kesinleşme bilgilendirmesi bulunmalı');
 });
 

@@ -90,9 +90,9 @@ export const businessConfig: BusinessConfig = {
   openingStatusText: 'Çok Yakında Adana Güzelyalı’da Açılıyoruz',
 
   contact: {
-    phone: 'Çok Yakında Açıklanacaktır',
-    phoneRaw: '',
-    hasActivePhone: false,
+    phone: '0540 303 66 37',
+    phoneRaw: '+905403036637',
+    hasActivePhone: true,
     email: 'iletisim@guzelyalidonercisi.com',
     address: {
       street: 'Güzelyalı Mahallesi (Açılış öncesi konum hazırlığı sürmektedir)',
@@ -133,6 +133,7 @@ export const businessConfig: BusinessConfig = {
 
   social: {
     instagram: 'https://instagram.com/guzelyalidonercisi',
+    whatsapp: 'https://wa.me/905403036637',
   },
 
   reservations: {
@@ -148,7 +149,7 @@ export const businessConfig: BusinessConfig = {
     ],
     minGuests: 1,
     maxGuests: 12,
-    whatsappNumber: process.env.RESERVATION_WHATSAPP_NUMBER || '',
+    whatsappNumber: '905403036637',
   },
 
   site: {

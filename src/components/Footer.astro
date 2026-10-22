@@ -76,6 +76,10 @@ const currentYear = new Date().getFullYear();
           <strong>Adres:</strong><br />
           {businessConfig.contact.address.fullText}
         </p>
+        <p class="phone-line">
+          <strong>Telefon & WhatsApp:</strong><br />
+          <a href={`tel:${businessConfig.contact.phoneRaw}`}>{businessConfig.contact.phone}</a>
+        </p>
         <p class="email-line">
           <strong>E-posta:</strong><br />
           <a href={`mailto:${businessConfig.contact.email}`}>{businessConfig.contact.email}</a>

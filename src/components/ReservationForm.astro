@@ -822,19 +822,24 @@ Not: ${formattedNote}`;
         statusBox.className = 'rez-status-box success';
 
         if (cleanWaNumber) {
-          // Doğrulanmış WhatsApp numarası varsa doğrudan yönlendir
+          // Doğrulanmış WhatsApp numarası doğrudan yönlendirme
           const waUrl = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(whatsappMessage)}`;
           statusBox.innerHTML = `
             <strong>Rezervasyon Talebiniz Hazırlandı!</strong>
-            <p>WhatsApp uygulaması açılıyor. Lütfen açılan ekranda "Gönder" butonuna basarak talebinizi işletmemize iletiniz.</p>
+            <p>WhatsApp uygulaması açılıyor. Lütfen açılan ekranda mesajı ileterek talebinizi onaylatınız.</p>
             <p style="margin-top: 8px;"><em>Rezervasyonunuz işletme tarafından onaylandıktan sonra kesinleşecektir.</em></p>
             <div class="rez-action-row">
               <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
-                WhatsApp'ta Aç
+                WhatsApp İle Gönder (0540 303 66 37)
               </a>
             </div>
+            <div class="rez-copy-box">${whatsappMessage}</div>
           `;
-          window.open(waUrl, '_blank');
+          try {
+            window.open(waUrl, '_blank');
+          } catch (e) {
+            window.location.href = waUrl;
+          }
         } else {
           // Açılış öncesi henüz resmi WhatsApp numarası atanmamışsa
           statusBox.innerHTML = `
