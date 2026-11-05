@@ -344,13 +344,13 @@ const structuredData = {
         <div class="cta-banner-text">
           <h2>Adana Çukurova’da Gerçek Yaprak Döneri Keşfedin</h2>
           <p>
-            Güzelyalı Dönercisi olarak çok yakında salonumuzda sizleri ağırlamaya hazırlanıyoruz. Menümüzü inceleyin veya konumuza göz atın.
+            Güzelyalı Dönercisi olarak kapılarımızı açtık. Hakiki köz ateşi yaprak döner lezzetini tatmak için salonumuza gelebilir veya hemen siparişinizi verebilirsiniz.
           </p>
         </div>
         <div class="cta-banner-actions">
-          <a href="/menu" class="btn btn-primary btn-lg">Menüyü İncele</a>
-          <a href="/rezervasyon" class="btn btn-secondary btn-lg">Masa Rezervasyonu</a>
-          <a href="/adana-doner-rehberi" class="btn btn-outline btn-lg">Döner Rehberini Oku</a>
+          <a href={`tel:${businessConfig.order.phoneRaw}`} class="btn btn-primary btn-lg">Sipariş Ver ({businessConfig.order.phone})</a>
+          <a href="/menu" class="btn btn-secondary btn-lg">Menüyü İncele</a>
+          <a href="/rezervasyon" class="btn btn-outline btn-lg">Masa Rezervasyonu</a>
         </div>
       </div>
     </div>

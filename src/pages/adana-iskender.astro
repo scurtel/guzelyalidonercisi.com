@@ -235,12 +235,12 @@ const structuredData = {
         <div class="cta-banner-text">
           <h2>Adana Çukurova’da İskender Ziyafetine Hazır Olun</h2>
           <p>
-            Güzelyalı Mahallesi'ndeki nezih salonumuzda çok yakında kapılarımızı açıyoruz. Menümüzdeki diğer lezzetleri inceleyebilir veya masa rezervasyonu talebinizi iletebilirsiniz.
+            Güzelyalı Mahallesi'ndeki nezih salonumuzda kapılarımızı açtık. Menümüzü inceleyebilir, salonumuza gelebilir veya hemen siparişinizi verebilirsiniz.
           </p>
         </div>
         <div class="cta-banner-actions">
-          <a href="/menu" class="btn btn-primary btn-lg">Tüm Menüyü İncele</a>
-          <a href="/adana-yaprak-doner" class="btn btn-secondary btn-lg">Yaprak Dönerimizi Keşfedin</a>
+          <a href={`tel:${businessConfig.order.phoneRaw}`} class="btn btn-primary btn-lg">Sipariş Ver ({businessConfig.order.phone})</a>
+          <a href="/menu" class="btn btn-secondary btn-lg">Tüm Menüyü İncele</a>
           <a href="/rezervasyon" class="btn btn-outline btn-lg">Masa Rezervasyonu</a>
         </div>
       </div>

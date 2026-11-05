@@ -15,6 +15,14 @@ export interface BusinessConfig {
   isOpeningSoon: boolean;
   openingStatusText: string;
   
+  // Sipariş Bilgileri
+  order: {
+    phone: string;
+    phoneRaw: string;
+    whatsappUrl: string;
+    note: string;
+  };
+  
   // İletişim Bilgileri
   contact: {
     phone: string;              // Görüntülenen telefon (örn: "+90 322 000 00 00")
@@ -84,10 +92,17 @@ export const businessConfig: BusinessConfig = {
   tagline: 'Adana Güzelyalı’da Gerçek Döner Ustalığı',
   slogan: 'Özenle seçilmiş et, ustalıkla açılmış şiş, köz ateşinde ağır ağır pişen lezzet.',
   shortDescription: 'Adana Güzelyalı’da geleneksel lezzeti modern ve tertemiz bir sunumla buluşturan premium döner salonu.',
-  metaDescription: 'Güzelyalı Dönercisi; Adana Güzelyalı’da özenle hazırlanan yaprak et döner, iskender ve özel dürümleriyle döner tutkunlarını ağırlamaya hazırlanıyor. Çok yakında hizmetinizde.',
+  metaDescription: 'Güzelyalı Dönercisi açıldı! Adana Güzelyalı’da özenle hazırlanan yaprak et döner, iskender ve özel dürümleriyle hizmetinizdeyiz. Hemen sipariş verin: 0540 303 66 37.',
   
-  isOpeningSoon: true,
-  openingStatusText: 'Çok Yakında Adana Güzelyalı’da Açılıyoruz',
+  isOpeningSoon: false,
+  openingStatusText: 'Kapılarımızı Açtık — Güzelyalı’da Hizmetinizdeyiz!',
+
+  order: {
+    phone: '0540 303 66 37',
+    phoneRaw: '+905403036637',
+    whatsappUrl: 'https://wa.me/905403036637?text=Merhaba,%20G%C3%BCzelyal%C4%B1%20D%C3%B6nercisi%27nden%20sipari%C5%9F%20vermek%20istiyorum.',
+    note: 'Köz ateşinde taze yaprak dönerimizi hemen sipariş verebilir, gel-al veya paket servis ile afiyetle tüketebilirsiniz.',
+  },
 
   contact: {
     phone: '0540 303 66 37',
@@ -95,13 +110,13 @@ export const businessConfig: BusinessConfig = {
     hasActivePhone: true,
     email: 'iletisim@guzelyalidonercisi.com',
     address: {
-      street: 'Güzelyalı Mahallesi (Açılış öncesi konum hazırlığı sürmektedir)',
+      street: 'Güzelyalı Mahallesi, Çukurova',
       district: 'Güzelyalı Mahallesi, Çukurova',
       city: 'Adana',
       country: 'Türkiye',
       postalCode: '01150',
       fullText: 'Güzelyalı Mahallesi, Çukurova / Adana, Türkiye',
-      hasExactAddress: false, // Kesin dükkan numarası netleştiğinde güncellenir
+      hasExactAddress: true,
     },
     // Güzelyalı Mahallesi Google Maps İşletme Profili ve Pin Koordinatları
     // Profil: https://maps.app.goo.gl/XHxKeHS4UhTNiNWv6
@@ -114,7 +129,7 @@ export const businessConfig: BusinessConfig = {
   },
 
   hours: {
-    statusNote: 'Açılış hazırlıklarımız devam ediyor. Çalışma saatlerimiz kapılarımızı açtığımız gün aktif olacaktır.',
+    statusNote: 'Haftanın 7 günü köz ateşinde taze dönerimizle salonumuzda ve paket serviste hizmetinizdeyiz.',
     schedule: [
       {
         days: 'Pazartesi - Cumartesi',

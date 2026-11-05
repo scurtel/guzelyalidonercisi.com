@@ -6,7 +6,7 @@ import { businessConfig } from '@/config/business';
   <div class="container hero-container">
     <div class="hero-content">
       <div class="hero-badge-wrap">
-        <span class="badge badge-opening">
+        <span class="badge badge-open">
           <span class="pulse-dot"></span>
           {businessConfig.openingStatusText}
         </span>
@@ -18,10 +18,17 @@ import { businessConfig } from '@/config/business';
       </h1>
 
       <p class="hero-lead">
-        Özenle dinlendirilmiş yerli dana ve kuzu eti, odun ve köz ateşinin ağır ağır işleyen sabrı, taptaze tırnaklı pide ve Çukurova’nın cömert misafirperverliği. Adana’da hakiki yaprak döner deneyimini çok yakında başlatıyoruz.
+        Özenle dinlendirilmiş yerli dana ve kuzu eti, odun ve köz ateşinin ağır ağır işleyen sabrı, taptaze tırnaklı pide ve Çukurova’nın cömert misafirperverliğiyle kapılarımızı açtık. Hakiki yaprak döner deneyimi için salonumuza bekliyoruz veya hemen siparişinizi verin.
       </p>
 
       <div class="hero-ctas">
+        <a href="#siparis" class="btn btn-order-highlight btn-lg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+          <span>Sipariş Ver ({businessConfig.order.phone})</span>
+        </a>
+
         <a href="/menu" class="btn btn-primary btn-lg">
           <span>Menüyü İncele</span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -160,6 +167,21 @@ import { businessConfig } from '@/config/business';
     flex-wrap: wrap;
     gap: 16px;
     margin-top: 8px;
+  }
+
+  .btn-order-highlight {
+    background-color: var(--color-burgundy);
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 16px rgba(122, 26, 34, 0.35);
+    border: 1px solid rgba(184, 139, 74, 0.45);
+    font-weight: 700;
+  }
+
+  .btn-order-highlight:hover {
+    background-color: var(--color-burgundy-hover);
+    color: #FFFFFF !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(122, 26, 34, 0.55);
   }
 
   .hero-highlights {

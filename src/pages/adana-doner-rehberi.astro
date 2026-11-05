@@ -186,14 +186,18 @@ const structuredData = {
         <div class="sidebar-sticky-box card">
           <div class="sidebar-brand-badge">
             <span class="pulse-dot"></span>
-            Açılış Hazırlığı Sürüyor
+            Kapılarımızı Açtık!
           </div>
           <h3>Güzelyalı Dönercisi</h3>
           <p class="sidebar-desc">
-            Adana Çukurova Güzelyalı’da hakiki yaprak et döner ve tereyağlı İskender ustalığını çok yakında sizlerle buluşturuyoruz.
+            Adana Çukurova Güzelyalı’da hakiki yaprak et döner ve tereyağlı İskender ustalığıyla hizmetinizdeyiz. Hemen arayarak siparişinizi verebilirsiniz.
           </p>
           
           <div class="sidebar-links">
+            <a href={`tel:${businessConfig.order.phoneRaw}`} class="sidebar-link-btn" style="background-color: var(--color-burgundy); color: #fff; border-color: var(--color-burgundy);">
+              <span>📞 Sipariş: {businessConfig.order.phone}</span>
+              <span>→</span>
+            </a>
             <a href="/adana-yaprak-doner" class="sidebar-link-btn">
               <span>🥩 Yaprak Döner Ustalığımız</span>
               <span>→</span>

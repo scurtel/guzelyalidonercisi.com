@@ -1,0 +1,343 @@
+---
+import { businessConfig } from '@/config/business';
+---
+
+<section class="order-section" id="siparis" aria-label="Sipariş Ver">
+  <div class="container">
+    <div class="order-card">
+      <div class="order-content">
+        <div class="order-badge-wrap">
+          <span class="badge badge-brass">
+            <span class="pulse-dot"></span>
+            Paket Servis & Gel-Al
+          </span>
+        </div>
+
+        <h2 class="order-title">
+          Köz Ateşinde Hakiki Yaprak Döner <br />
+          <span class="text-accent">Hemen Sipariş Verin!</span>
+        </h2>
+
+        <p class="order-lead">
+          Güzelyalı Dönercisi’nin eşsiz odun ve köz ateşinde pişen yaprak dönerini, dürümlerini ve İskender lezzetini evinizde ya da ofisinizde deneyimleyin. İster arayın kapınıza getirelim, ister gel-al ile beklemeden teslim alın.
+        </p>
+
+        <!-- Sipariş Butonları -->
+        <div class="order-actions">
+          <a 
+            href={`tel:${businessConfig.order.phoneRaw}`} 
+            class="btn btn-call-order"
+            aria-label={`Telefonla Sipariş Ver: ${businessConfig.order.phone}`}
+          >
+            <div class="btn-icon-circle">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+            </div>
+            <div class="btn-text-group">
+              <span class="btn-sub">Telefonla Sipariş Hattı</span>
+              <span class="btn-main-num">{businessConfig.order.phone}</span>
+            </div>
+          </a>
+
+          <a 
+            href={businessConfig.order.whatsappUrl} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-whatsapp-order"
+            aria-label="WhatsApp İle Sipariş Ver"
+          >
+            <div class="btn-icon-circle wa-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+            </div>
+            <div class="btn-text-group">
+              <span class="btn-sub">WhatsApp Sipariş Hattı</span>
+              <span class="btn-main-action">WhatsApp’tan Yazın</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Özellik Rozetleri -->
+        <div class="order-features">
+          <div class="order-feature-item">
+            <span class="feat-icon">🛵</span>
+            <div class="feat-info">
+              <strong>Hızlı Paket Servis</strong>
+              <span>Güzelyalı & Çukurova bölgesi</span>
+            </div>
+          </div>
+
+          <div class="order-feature-item">
+            <span class="feat-icon">🛍️</span>
+            <div class="feat-info">
+              <strong>Sıcak Gel-Al Teslimat</strong>
+              <span>Arayın, hemen hazırlayalım</span>
+            </div>
+          </div>
+
+          <div class="order-feature-item">
+            <span class="feat-icon">🔥</span>
+            <div class="feat-info">
+              <strong>Doğal Köz Döneri</strong>
+              <span>Günlük taze kesim yaprak et</span>
+            </div>
+          </div>
+
+          <div class="order-feature-item">
+            <span class="feat-icon">⏰</span>
+            <div class="feat-info">
+              <strong>Çalışma Saatleri</strong>
+              <span>11:30 - 22:30 arası</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .order-section {
+    padding: 64px 0;
+    background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-surface-subtle) 100%);
+  }
+
+  .order-card {
+    position: relative;
+    background: radial-gradient(circle at top right, #381216 0%, #1c0a0c 50%, #150608 100%);
+    color: #FAF7F2;
+    border-radius: var(--radius-lg);
+    padding: 56px 40px;
+    box-shadow: 0 16px 40px rgba(122, 26, 34, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(184, 139, 74, 0.35);
+    overflow: hidden;
+  }
+
+  .order-card::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(184, 139, 74, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .order-content {
+    position: relative;
+    z-index: 2;
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .order-badge-wrap {
+    display: inline-flex;
+    margin-bottom: 16px;
+  }
+
+  .order-badge-wrap .badge {
+    background-color: rgba(184, 139, 74, 0.2);
+    color: #E5BE7E;
+    border: 1px solid rgba(184, 139, 74, 0.5);
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .order-badge-wrap .pulse-dot {
+    background-color: #2ECC71;
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+    animation: pulse-green 1.8s infinite;
+  }
+
+  @keyframes pulse-green {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+    }
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 8px rgba(46, 204, 113, 0);
+    }
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+    }
+  }
+
+  .order-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.8vw, 3rem);
+    line-height: 1.25;
+    margin-bottom: 18px;
+    color: #FAF7F2;
+  }
+
+  .text-accent {
+    color: #E5BE7E;
+  }
+
+  .order-lead {
+    font-size: 1.12rem;
+    color: #E5DCD1;
+    max-width: 720px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+  }
+
+  .order-actions {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 44px;
+  }
+
+  .btn-call-order, .btn-whatsapp-order {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 28px;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: transform var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-fast);
+  }
+
+  .btn-call-order {
+    background: linear-gradient(135deg, #7A1A22 0%, #9E242E 100%);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 6px 20px rgba(122, 26, 34, 0.5);
+  }
+
+  .btn-call-order:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #9E242E 0%, #B42C37 100%);
+    box-shadow: 0 10px 28px rgba(122, 26, 34, 0.7);
+    color: #FFFFFF;
+  }
+
+  .btn-whatsapp-order {
+    background: linear-gradient(135deg, #1E7E45 0%, #25D366 100%);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+  }
+
+  .btn-whatsapp-order:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #25D366 0%, #2EE073 100%);
+    box-shadow: 0 10px 28px rgba(37, 211, 102, 0.55);
+    color: #FFFFFF;
+  }
+
+  .btn-icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.18);
+    flex-shrink: 0;
+  }
+
+  .btn-text-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .btn-sub {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+  }
+
+  .btn-main-num {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+
+  .btn-main-action {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .order-features {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-top: 32px;
+  }
+
+  .order-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .feat-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .feat-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .feat-info strong {
+    font-size: 0.88rem;
+    color: #FAF7F2;
+    font-weight: 600;
+  }
+
+  .feat-info span {
+    font-size: 0.76rem;
+    color: #C5BCB5;
+  }
+
+  @media (max-width: 900px) {
+    .order-features {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .order-card {
+      padding: 36px 20px;
+    }
+
+    .order-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .btn-call-order, .btn-whatsapp-order {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .order-features {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

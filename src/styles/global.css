@@ -273,6 +273,12 @@ p {
   border: 1px solid #F2D29B;
 }
 
+.badge-open {
+  background-color: #EBF8F1;
+  color: #1E7E45;
+  border: 1px solid #A3E3BE;
+}
+
 /* Kartlar */
 .card {
   background-color: var(--color-surface-card);
