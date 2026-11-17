@@ -46,6 +46,7 @@ const currentYear = new Date().getFullYear();
         <li><a href="/rezervasyon">Masa Rezervasyonu</a></li>
         <li><a href="/lezzetimiz">Döner Ustalığımız</a></li>
         <li><a href="/iletisim">İletişim & Konum</a></li>
+        <li><button type="button" class="footer-panel-btn" data-open-panel-modal>🔒 ERP Yönetim Paneli</button></li>
       </ul>
     </div>
 
@@ -215,6 +216,26 @@ const currentYear = new Date().getFullYear();
   }
 
   .footer-links a:hover {
+    color: #FFFFFF;
+    transform: translateX(4px);
+  }
+
+  .footer-panel-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-brass);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .footer-panel-btn:hover {
     color: #FFFFFF;
     transform: translateX(4px);
   }

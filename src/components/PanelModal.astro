@@ -1,0 +1,489 @@
+---
+// PanelModal.astro - Restoran ERP & Yönetim Paneli Giriş ve Masaüstü İndirme Modalı
+---
+
+<div id="erpPanelModal" class="erp-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="erpModalTitle">
+  <div class="erp-modal-backdrop" id="erpModalBackdrop"></div>
+  
+  <div class="erp-modal-card">
+    <!-- Header -->
+    <div class="erp-modal-header">
+      <div class="erp-header-title-group">
+        <div class="erp-icon-badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </div>
+        <div>
+          <h2 id="erpModalTitle" class="erp-modal-heading">Güzelyalı ERP — Yönetim Paneli</h2>
+          <p class="erp-modal-subheading">Restoran Mühendisliği, Kasa POS, Stok ve Finans Merkezi</p>
+        </div>
+      </div>
+      <button type="button" id="erpModalCloseBtn" class="erp-modal-close" aria-label="Kapat">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="erp-modal-body">
+      <!-- Options Grid -->
+      <div class="erp-options-grid">
+        
+        <!-- 1. Web Paneli Giriş Kartı -->
+        <div class="erp-card erp-card-primary">
+          <div class="erp-card-badge">⚡ Canlı & Çevrimiçi</div>
+          <div class="erp-card-icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </div>
+          <h3 class="erp-card-title">Web Paneline Giriş Yap</h3>
+          <p class="erp-card-desc">
+            Herhangi bir kurulum yapmadan bilgisayar, tablet veya telefondan anında sisteme erişin.
+          </p>
+          <ul class="erp-card-features">
+            <li>✓ Canlı SQLite veritabanı</li>
+            <li>✓ Dokunmatik Kasa & Hızlı Satış</li>
+            <li>✓ Yemeksepeti & Telefon siparişleri</li>
+          </ul>
+          <a 
+            href="https://panel.guzelyalidonercisi.com/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary erp-action-btn"
+          >
+            <span>Panele Giriş Yap</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
+        </div>
+
+        <!-- 2. Windows Masaüstü Programı Kartı -->
+        <div class="erp-card erp-card-secondary">
+          <div class="erp-card-badge erp-badge-gold">💻 Windows Kurulum</div>
+          <div class="erp-card-icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <h3 class="erp-card-title">Windows Programını İndir (.EXE)</h3>
+          <p class="erp-card-desc">
+            İnternet kesintilerinden etkilenmeyen, 80 mm termal fiş yazıcılarına tam entegre masaüstü sürümü.
+          </p>
+          <ul class="erp-card-features">
+            <li>✓ %100 Çevrimdışı (Offline) çalışma</li>
+            <li>✓ Otomatik termal adisyon & mutfak fişi</li>
+            <li>✓ Windows 10 & 11 (64-Bit) uyumlu (~139 MB)</li>
+          </ul>
+          <a 
+            href="https://github.com/scurtel/guzelyal--donercisi-erp/releases/download/v1.0.0/Guzelyali-ERP-Setup-1.0.0.exe" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-brass erp-action-btn"
+          >
+            <span>Programı İndir (.exe)</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Portable & Fast Download Row -->
+      <div class="erp-portable-strip">
+        <div class="erp-portable-info">
+          <strong>Taşınabilir (Portable) Sürüm mü istiyorsunuz?</strong>
+          <span>Kurulum yapmadan flash bellekten veya masaüstünden tek tıkla çalıştırmak için:</span>
+        </div>
+        <a 
+          href="https://github.com/scurtel/guzelyal--donercisi-erp/releases/download/v1.0.0/Guzelyali-ERP-Portable-1.0.0.exe" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn btn-secondary btn-sm"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Portable (.exe) İndir</span>
+        </a>
+      </div>
+
+      <!-- Password Notice Box -->
+      <div class="erp-credentials-box">
+        <div class="erp-cred-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+        <div class="erp-cred-text">
+          <div class="erp-cred-title">Giriş Şifresi Bilgisi:</div>
+          <p>
+            Tüm yönetici ve personel hesapları (Yigit Cilli, Danyal Cilli, Doruk Cilli, Kasa ve Usta) için ortak başlangıç PIN / şifresi: <strong class="erp-highlight-code">60060</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .erp-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .erp-modal-overlay.is-active {
+    display: flex;
+  }
+
+  .erp-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(28, 22, 20, 0.75);
+    backdrop-filter: blur(6px);
+  }
+
+  .erp-modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 780px;
+    background: #FFFFFF;
+    border-radius: 24px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 25px 50px -12px rgba(28, 22, 20, 0.25);
+    overflow: hidden;
+    animation: erpModalIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @keyframes erpModalIn {
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .erp-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.75rem;
+    background: #1C1614;
+    color: #FAF7F2;
+    border-bottom: 2px solid var(--color-brass);
+  }
+
+  .erp-header-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .erp-icon-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(184, 139, 74, 0.18);
+    color: var(--color-brass);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(184, 139, 74, 0.35);
+  }
+
+  .erp-modal-heading {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #FAF7F2;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .erp-modal-subheading {
+    font-size: 0.8rem;
+    color: rgba(250, 247, 242, 0.7);
+    margin: 0.2rem 0 0 0;
+  }
+
+  .erp-modal-close {
+    background: transparent;
+    border: none;
+    color: rgba(250, 247, 242, 0.6);
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 8px;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .erp-modal-close:hover {
+    color: #FAF7F2;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .erp-modal-body {
+    padding: 1.5rem 1.75rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    background: #FAF7F2;
+  }
+
+  .erp-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 680px) {
+    .erp-options-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .erp-card {
+    position: relative;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(28, 22, 20, 0.04);
+    transition: all 0.2s ease;
+  }
+
+  .erp-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(28, 22, 20, 0.08);
+  }
+
+  .erp-card-primary {
+    border-color: rgba(122, 26, 34, 0.3);
+  }
+
+  .erp-card-secondary {
+    border-color: rgba(184, 139, 74, 0.35);
+  }
+
+  .erp-card-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(122, 26, 34, 0.1);
+    color: var(--color-burgundy);
+  }
+
+  .erp-badge-gold {
+    background: rgba(184, 139, 74, 0.15);
+    color: var(--color-brass-hover);
+  }
+
+  .erp-card-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--color-surface-subtle);
+    color: var(--color-burgundy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .erp-card-secondary .erp-card-icon-wrap {
+    color: var(--color-brass);
+  }
+
+  .erp-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin-bottom: 0.4rem;
+  }
+
+  .erp-card-desc {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    line-height: 1.4;
+    margin-bottom: 1rem;
+  }
+
+  .erp-card-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem 0;
+    font-size: 0.78rem;
+    color: var(--color-ink-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .erp-action-btn {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+  }
+
+  .erp-portable-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: #FFFFFF;
+    border: 1px dashed var(--color-border);
+    padding: 0.85rem 1.25rem;
+    border-radius: 14px;
+  }
+
+  @media (max-width: 600px) {
+    .erp-portable-strip {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  .erp-portable-info {
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .erp-portable-info strong {
+    color: var(--color-ink);
+    font-size: 0.85rem;
+  }
+
+  .erp-credentials-box {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    background: #F8EDEF;
+    border: 1px solid var(--color-burgundy-border);
+    border-radius: 14px;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .erp-cred-icon {
+    color: var(--color-burgundy);
+    flex-shrink: 0;
+  }
+
+  .erp-cred-text {
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+    line-height: 1.4;
+  }
+
+  .erp-cred-title {
+    font-weight: 700;
+    color: var(--color-burgundy);
+    margin-bottom: 0.15rem;
+  }
+
+  .erp-highlight-code {
+    display: inline-block;
+    background: #FFFFFF;
+    border: 1px solid var(--color-burgundy);
+    color: var(--color-burgundy);
+    padding: 0.1rem 0.45rem;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    function initPanelModal() {
+      var modal = document.getElementById('erpPanelModal');
+      var backdrop = document.getElementById('erpModalBackdrop');
+      var closeBtn = document.getElementById('erpModalCloseBtn');
+
+      if (!modal) return;
+
+      function openModal(e) {
+        if (e) e.preventDefault();
+        modal.classList.add('is-active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        modal.classList.remove('is-active');
+        document.body.style.overflow = '';
+      }
+
+      // Attach click handlers to any triggers
+      document.addEventListener('click', function(e) {
+        var trigger = e.target.closest('[data-open-panel-modal], #openPanelModal, #openPanelModalMobile, .open-panel-modal-btn');
+        if (trigger) {
+          openModal(e);
+        }
+      });
+
+      if (closeBtn) closeBtn.addEventListener('click', closeModal);
+      if (backdrop) backdrop.addEventListener('click', closeModal);
+
+      // Escape key closes
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+          closeModal();
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPanelModal);
+    } else {
+      initPanelModal();
+    }
+  })();
+</script>
